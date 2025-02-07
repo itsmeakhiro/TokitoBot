@@ -47,7 +47,7 @@ async function initializeServer(port) {
 function launchProcess(instanceIndex) {
   const childProcess = spawn(
     "node",
-    ["--trace-warnings", "--async-stack-traces", "main.js"],
+    ["--trace-warnings", "--async-stack-traces", "core.js"],
     {
       cwd: __dirname,
       stdio: "inherit",
