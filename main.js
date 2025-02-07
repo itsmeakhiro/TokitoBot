@@ -11,6 +11,5 @@ process.on("uncaughtException", (error) => log("ERROR", error));
 
 global.Tokito = {
     get config(){
-        
+        return JSON.parse(fs.readFileSync(path.join))
     }
-}
