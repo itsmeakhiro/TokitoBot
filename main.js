@@ -8,3 +8,9 @@ process.on("uncaughtException", (...args) => log("ERROR", ...args));
 
 process.on("unhandledRejection", (error) => log("ERROR", error));
 process.on("uncaughtException", (error) => log("ERROR", error));
+
+global.Tokito = {
+    get config(){
+        
+    }
+}
