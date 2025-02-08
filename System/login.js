@@ -18,5 +18,11 @@ module.exports = async function logger(){
       log("SYSTEM", "Logged In Successfully...")
     }
     
-   })  
+    api.setOptions({
+      listenEvents: config.fcaOptions.listenEvents;
+      selfListen: config.fcaOptions.selfListen;
+    })
+
+    try 
+  })  
 }
