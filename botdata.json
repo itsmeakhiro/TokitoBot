@@ -1,0 +1,11 @@
+{
+  "fcaOptions": {
+    "listenEvents": true
+  },
+  "prefix": "!",
+  "subprefix": "/",
+  "developers": [""],
+  "admins": [""],
+  "moderators": [""],
+  "maintenance": false
+}
