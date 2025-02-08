@@ -56,8 +56,6 @@ function log(type, message) {
   }
 
 
-const { config } = global.Tokito;
-
 async function start() {
     app.listen(8080);
 

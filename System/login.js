@@ -2,7 +2,9 @@ const login = require("chatbox-fca-remake");
 const fs = require("fs-extra");
 const path = require("path");
 
-async function logger(){
+const { config } = global.Tokito;
+
+module.exports = async function logger(){
    const cookie = fs.readJSONSync(path.join(__dirname, "cookies.json"));
    const original = console.log;
    console.log = () => {};
