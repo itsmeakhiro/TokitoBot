@@ -23,6 +23,18 @@ module.exports = async function logger(){
       selfListen: config.fcaOptions.selfListen;
     })
 
-    try 
+    try {
+      var listenerEmitter = api.listenMqtt(async (error, event) => {
+        if (error){
+          log("ERROR", error ? === "Connection Closed" ? " Connection Failed To Connect" : error);
+          return;
+        }
+
+        const listener = require("./listener");
+        await listener({ api, event })
+      });
+    } catch (error) {
+     log("ERROR", `Failed to start: ${error.stack}`)
+    };
   })  
 }
