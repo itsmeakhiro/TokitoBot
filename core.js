@@ -19,7 +19,7 @@ global.Tokito = {
             const str = JSON.stringify(finalData, null, 2);
                 fs.writeFileSync(path.join(__dirname, "botdata.json"), str);
     },
-    commands: new Map();
+    commands: new Map(),
     events: new Map()
 },
 
