@@ -12,7 +12,11 @@ module.exports = async function logger(){
     console.log = original;
 
     if (err){
-      log("")
+      log("ERROR", `Login Failed: ${err.message}`);
+      return;
+    } else {
+      log("SYSTEM", "Logged In Successfully...")
     }
+    
    })  
 }

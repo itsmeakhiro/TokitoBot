@@ -76,7 +76,7 @@ async function start() {
     log("SYSTEM", "Loading Cookies...");
     log("SYSTEM", "Logging in...");
     const logger = require("./System/login");
-    await logger;
+    await logger();
 }
 
 start();
