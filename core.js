@@ -76,7 +76,9 @@ async function start() {
     log("SYSTEM", "Deploying Events...");
     await utils.loadEvents();
     log("SYSTEM", "Loading Cookies...");
-    log("SYSTEM", "Logging in...")
+    log("SYSTEM", "Logging in...");
+    const logger = require("./System/login");
+    await logger;
 }
 
 start();

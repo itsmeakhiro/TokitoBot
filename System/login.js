@@ -3,5 +3,14 @@ const fs = require("fs-extra");
 const path = require("path");
 
 async function logger(){
-    
+   const cookie = fs.readJSONSync(path.join(__dirname, "cookies.json"));
+   const original = console.log;
+   console.log = () => {};
+   login({ appState: cookie }, (err, api) => {
+    console.log = original;
+
+    if (err){
+      log("")
+    }
+   })  
 }
