@@ -71,5 +71,12 @@ async function start() {
     log("TOP", head);
     log("SYSTEM", "Initializing Tokito...");
     log("SYSTEM", "Initialized Success...");
-    log("SYSTEM", "Deploying Commands...")
+    log("SYSTEM", "Deploying Commands...");
+    await utils.loadCommands();
+    log("SYSTEM", "Deploying Events...");
+    await utils.loadEvents();
+    log("SYSTEM", "Loading Cookies...");
+    log("SYSTEM", "Logging in...")
 }
+
+start();
