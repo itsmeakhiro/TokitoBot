@@ -2,7 +2,7 @@
   "fcaOptions": {
     "listenEvents": true,
     "forceLogin": false,
-    "userAgent": "",
+    "userAgent": ""
   },
   "prefix": "!",
   "subprefix": "/",
