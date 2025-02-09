@@ -19,14 +19,15 @@ module.exports = async function logger(){
     }
     
     api.setOptions({
-      listenEvents: config.fcaOptions.listenEvents;
-      selfListen: config.fcaOptions.selfListen;
+      listenEvents: config.fcaOptions.listenEvents,
+      selfListen: config.fcaOptions.selfListen,
+      userAgent: config.fcaOptions.userAgent
     })
 
     try {
       var listenerEmitter = api.listenMqtt(async (error, event) => {
         if (error){
-          log("ERROR", error ? === "Connection Closed" ? " Connection Failed To Connect" : error);
+          log("ERROR", error === "Connection Closed" ? "Connection Failed To Connect" : error);
           return;
         }
 

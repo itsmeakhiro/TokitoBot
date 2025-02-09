@@ -6,8 +6,8 @@ const app = express();
 process.on("unhandledRejection", (...args) => log("ERROR", ...args));
 process.on("uncaughtException", (...args) => log("ERROR", ...args));
 
-process.on("unhandledRejection", (error) => log("ERROR", error));
-process.on("uncaughtException", (error) => log("ERROR", error));
+process.on("unhandledRejection", (error) => log("ERROR", error.stack));
+process.on("uncaughtException", (error) => log("ERROR", error.stack));
 
 global.Tokito = {
     get config(){
@@ -41,8 +41,8 @@ Object.assign(global.Tokito, {
   },
   get moderator(){
     return global.Tokito.config.moderator;
-  }
-});
+  },
+})
 
 function log(type, message) {
       const colors = {
