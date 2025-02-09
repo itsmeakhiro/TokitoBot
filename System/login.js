@@ -4,6 +4,17 @@ const path = require("path");
 
 const { config } = global.Tokito;
 
+function log(type, message){
+  const colors = {
+          TOP: "\x1b[32m",
+          SYSTEM: "\x1b[34m",
+          COMMAND: "\x1b[32m",
+          ERROR: "\x1b[31m",
+          RESET: "\x1b[0m",
+      };
+    console.log(`${colors[type] || colors.SYSTEM}[ ${type} ]${colors.RESET} ${message}`);
+  }
+
 module.exports = async function logger(){
    const cookie = fs.readJSONSync(path.join(__dirname, "..", "cookies.json"));
    const original = console.log;
@@ -20,8 +31,8 @@ module.exports = async function logger(){
     
     api.setOptions({
       listenEvents: config.fcaOptions.listenEvents,
-      selfListen: config.fcaOptions.selfListen,
-      userAgent: config.fcaOptions.userAgent
+      selfListen: config.fcaOptions.selfListen
+
     })
 
     try {
