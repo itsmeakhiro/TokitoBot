@@ -17,10 +17,7 @@ function log(type, message){
 
 module.exports = async function logger(){
    const cookie = fs.readJSONSync(path.join(__dirname, "..", "cookies.json"));
-   const original = console.log;
-   console.log = () => {};
    login({ appState: cookie }, (err, api) => {
-    console.log = original;
 
     if (err){
       log("ERROR", `Login Failed: ${err.message}`);
