@@ -5,7 +5,7 @@ const path = require("path");
 const { config } = global.Tokito;
 
 module.exports = async function logger(){
-   const cookie = fs.readJSONSync(path.join(__dirname, "cookies.json"));
+   const cookie = fs.readJSONSync(path.join(__dirname, "..", "cookies.json"));
    const original = console.log;
    console.log = () => {};
    login({ appState: cookie }, (err, api) => {

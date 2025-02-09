@@ -1,6 +1,8 @@
 {
   "fcaOptions": {
-    "listenEvents": true
+    "listenEvents": true,
+    "forceLogin": false,
+    "userAgent": "",
   },
   "prefix": "!",
   "subprefix": "/",

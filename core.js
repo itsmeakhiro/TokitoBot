@@ -20,7 +20,8 @@ global.Tokito = {
                 fs.writeFileSync(path.join(__dirname, "botdata.json"), str);
     },
     commands: new Map(),
-    events: new Map()
+    events: new Map(),
+    cooldown: new Map()
 },
 
 Object.assign(global.Tokito, {
