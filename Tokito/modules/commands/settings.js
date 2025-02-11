@@ -20,7 +20,7 @@ module.exports = {
         }
 
         const action = args[0].toLowerCase();
-        const commandsDir = path.join(__dirname);
+        const commandsDir = path.join(__dirname); // Adjust this if needed
 
         switch (action) {
             case "system":
