@@ -13,7 +13,7 @@ module.exports = {
          botModerator: false,
       },
    },
-   async deploy({ chat, args, fonts }) {
+   async deploy({ chat, args, fonts, event }) {
       const query = args.join(" ");
       if (!query) {
          return chat.send(fonts.sans("Provide a question, like this ai what is niggerian"));
@@ -21,7 +21,7 @@ module.exports = {
 
       try {
          const response = await axios.get(`https://kaiz-apis.gleeze.com/api/gpt-4o`, {
-            params: { ask: query, uid: 1, webSearch: "off" }
+            params: { ask: query, uid: event.senderID, webSearch: "on" }
          });
 
          if (response.data?.response) {
