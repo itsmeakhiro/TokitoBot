@@ -11,7 +11,7 @@ module.exports = {
             botModerator: false,
         },
     },
-    async deploy({ chat, args, fonts }) {
+    async deploy({ chat, args, fonts, event }) {
         if (!args.length) {
             return chat.send(fonts.sans("Please provide JavaScript code to evaluate."));
         }

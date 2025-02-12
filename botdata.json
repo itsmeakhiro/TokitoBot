@@ -4,10 +4,16 @@
     "forceLogin": false,
     "userAgent": ""
   },
-  "prefix": "!",
+  "prefix": ".",
   "subprefix": "/",
-  "developers": ["61554222594723"],
-  "admins": ["61554222594723"],
-  "moderators": [""],
+  "developers": [
+    "61554222594723"
+  ],
+  "admins": [
+    "61554222594723"
+  ],
+  "moderators": [
+    ""
+  ],
   "maintenance": false
 }

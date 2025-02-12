@@ -20,7 +20,8 @@ module.exports = {
         }
 
         const action = args[0].toLowerCase();
-        const commandsDir = path.join(__dirname); // Adjust this if needed
+        const commandsDir = path.resolve(__dirname); 
+        const botDataPath = path.resolve(__dirname, "../../../botdata.json");
 
         switch (action) {
             case "system":
@@ -64,8 +65,21 @@ module.exports = {
                         }
 
                         const newPrefix = args[2];
-                        global.Tokito.config.prefix = newPrefix;
-                        chat.send(fonts.monospace(`Prefix changed to '${newPrefix}'.`));
+
+                        if (!fs.existsSync(botDataPath)) {
+                            return chat.send(fonts.bold("Error:\n") + fonts.bold("botdata.json not found."));
+                        }
+
+                        try {
+                            const botData = JSON.parse(fs.readFileSync(botDataPath, "utf8"));
+                            botData.prefix = newPrefix;
+                            fs.writeFileSync(botDataPath, JSON.stringify(botData, null, 2), "utf8");
+
+                            global.Tokito.config.prefix = newPrefix;
+                            chat.send(fonts.monospace(`Prefix changed to '${global.Tokito.config.prefix}'.`));
+                        } catch (error) {
+                            chat.send(fonts.bold("Error:\n") + fonts.bold("Failed to update prefix."));
+                        }
                         break;
 
                     case "update":
