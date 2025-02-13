@@ -4,7 +4,7 @@ module.exports = {
    manifest: {
       name: "ai",
       aliases: ["chatgpt", "gpt"],
-      author: "Francis Loyd Raval", // nahhh ok nato
+      author: "Aljur Pogoy", 
       description: "Chat with AI.",
       usage: "ai <message>",
       cooldown: 5,
@@ -25,7 +25,7 @@ module.exports = {
          });
 
          if (response.data?.response) {
-            chat.send(fonts.sans(`Gpt4 Response: ${response.data.response}`));
+            chat.send(fonts.sans(`${response.data.response}`));
          } else {
             chat.send(fonts.sans("try again maybe the API is error or traffic error code "));
          }
