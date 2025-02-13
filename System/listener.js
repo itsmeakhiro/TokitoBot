@@ -1,6 +1,7 @@
 const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
+const apiHandler = require("./handler/apiHandler");
 
 module.exports = async function listener({ api, event }) {
   const { prefix } = global.Tokito;
@@ -69,6 +70,7 @@ module.exports = async function listener({ api, event }) {
     event,
     args,
     fonts,
+    router,
   };
 
   if (command) {
