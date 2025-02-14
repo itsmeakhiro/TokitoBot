@@ -1,17 +1,32 @@
+const fs = require("fs-extra");
+const path = require("path");
 const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
 
-module.exports = async function listener({ api, event }) {
-  const { prefix } = global.Tokito;
+const subprefixFile = path.join(__dirname, "System/handler/data/subprefixes.json");
 
+function getSubprefix(threadID) {
+  try {
+    const subprefixes = JSON.parse(fs.readFileSync(subprefixFile, "utf-8"));
+    return subprefixes[threadID] || null;
+  } catch {
+    return null;
+  }
+}
+
+module.exports = async function listener({ api, event }) {
   if (!event.body) return;
 
-  let [commandName, ...args] = event.body.split(" ");
+  const isGroup = event.threadID !== event.senderID;
+  const threadSubprefix = isGroup ? getSubprefix(event.threadID) : null;
+  const usedPrefix = isGroup ? threadSubprefix || global.Tokito.subprefix : global.Tokito.subprefix;
 
-  if (!commandName.startsWith(prefix)) return;
-  commandName = commandName.slice(prefix.length).toLowerCase();
+  if (!event.body.startsWith(usedPrefix)) return;
+
+  let [commandName, ...args] = event.body.slice(usedPrefix.length).split(" ");
+  commandName = commandName.toLowerCase();
 
   const command = global.Tokito.commands.get(commandName);
 
@@ -41,28 +56,27 @@ module.exports = async function listener({ api, event }) {
         });
       });
     },
-  fbPost: async ({ body, attachment }) => {
-    return new Promise((resolve, reject) => {
-      api.createPost({ body: body || "", attachment: attachment || [] }, (error, data) => {
-        if (error) {
-          console.error("Facebook Post Error:", error);
-          reject({ success: false, message: "Failed to create post", error });
-          return;
-        }
+    fbPost: async ({ body, attachment }) => {
+      return new Promise((resolve, reject) => {
+        api.createPost({ body: body || "", attachment: attachment || [] }, (error, data) => {
+          if (error) {
+            console.error("Facebook Post Error:", error);
+            reject({ success: false, message: "Failed to create post", error });
+            return;
+          }
 
-        if (!data?.data || data.errors) {
-          console.error("Unexpected API Response:", data);
-          reject({ success: false, message: "API returned an error", data });
-          return;
-        }
+          if (!data?.data || data.errors) {
+            console.error("Unexpected API Response:", data);
+            reject({ success: false, message: "API returned an error", data });
+            return;
+          }
 
-        console.log("Post Successful:", data);
-        resolve({ success: true, data });
+          console.log("Post Successful:", data);
+          resolve({ success: true, data });
+        });
       });
-    });
-  },
-};
-
+    },
+  };
 
   const entryObj = {
     api,
