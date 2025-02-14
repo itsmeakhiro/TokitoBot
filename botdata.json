@@ -1,6 +1,7 @@
 {
   "fcaOptions": {
     "listenEvents": true,
+    "bypassRegion": "PNB",
     "forceLogin": false,
     "userAgent": ""
   },

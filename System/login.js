@@ -44,6 +44,7 @@ module.exports = async function logger() {
         api.setOptions({
             listenEvents: config.fcaOptions.listenEvents,
             selfListen: config.fcaOptions.selfListen,
+            bypassRegion: config.fcaOptions.bypassRegion,
         });
 
         try {

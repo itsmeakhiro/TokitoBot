@@ -3,21 +3,23 @@ const path = require("path");
 const express = require("express");
 const app = express();
 
-process.on("unhandledRejection", (...args) => log("ERROR", ...args));
-process.on("uncaughtException", (...args) => log("ERROR", ...args));
-
 process.on("unhandledRejection", (error) => log("ERROR", error.stack));
 process.on("uncaughtException", (error) => log("ERROR", error.stack));
 
 global.Tokito = {
     get config(){
-        return JSON.parse(fs.readFileSync(path.join(__dirname, "botdata.json"), "utf-8"));
+        try {
+            return JSON.parse(fs.readFileSync(path.join(__dirname, "botdata.json"), "utf-8"));
+        } catch (error) {
+            log("ERROR", "Failed to read botdata.json: " + error.message);
+            return {};
+        }
     },
     set config(config){
         const data = global.Tokito.config;
         const finalData = { ...data, ...config };
-            const str = JSON.stringify(finalData, null, 2);
-                fs.writeFileSync(path.join(__dirname, "botdata.json"), str);
+        const str = JSON.stringify(finalData, null, 2);
+        fs.writeFileSync(path.join(__dirname, "botdata.json"), str);
     },
     commands: new Map(),
     events: new Map(),
@@ -25,37 +27,23 @@ global.Tokito = {
 },
 
 Object.assign(global.Tokito, {
-  get prefix(){
-    return global.Tokito.config.prefix;
-  },
-  get subprefix(){
-    return global.Tokito.config.subprefix;
-  },
-  get maintenance(){
-    return global.Tokito.config.maintenance;
-  },
-  get developers(){
-    return global.Tokito.config.developers;
-  },
-  get admins(){
-    return global.Tokito.config.admins;
-  },
-  get moderator(){
-    return global.Tokito.config.moderator;
-  },
-})
+    get prefix() { return global.Tokito.config.prefix; },
+    get subprefix() { return global.Tokito.config.subprefix; },
+    get maintenance() { return global.Tokito.config.maintenance; },
+    get developers() { return global.Tokito.config.developers; },
+    get admins() { return global.Tokito.config.admins; },
+    get moderator() { return global.Tokito.config.moderator; },
+});
 
 function log(type, message) {
-      const colors = {
-          TOP: "\x1b[32m",
-          SYSTEM: "\x1b[34m",
-          COMMAND: "\x1b[32m",
-          ERROR: "\x1b[31m",
-          RESET: "\x1b[0m",
-      };
+    const colors = {
+        SYSTEM: "\x1b[36m",
+        COMMAND: "\x1b[32m",
+        ERROR: "\x1b[31m",
+        RESET: "\x1b[0m",
+    };
     console.log(`${colors[type] || colors.SYSTEM}[ ${type} ]${colors.RESET} ${message}`);
-  }
-
+}
 
 async function start() {
     app.listen(8080);
@@ -63,11 +51,11 @@ async function start() {
     const utils = require("./utils");
     global.Tokito.utils = utils;
 
-    const head = `
-      ▀█▀ █▀█ █▄▀ █ ▀█▀ █▀█
-      ░█░ █▄█ █░█ █ ░█░ █▄█
-    `;
-    log("TOP", head);
+    console.log(`
+      \x1b[33m▀█▀ █▀█ █▄▀ █ ▀█▀ █▀█\x1b[0m
+      \x1b[36m░█░ █▄█ █░█ █ ░█░ █▄█\x1b[0m
+    `);
+
     log("SYSTEM", "Initializing Tokito...");
     log("SYSTEM", "Initialized Success...");
     log("SYSTEM", "Deploying Commands...");
@@ -79,5 +67,10 @@ async function start() {
     const logger = require("./System/login");
     await logger();
 }
+
+process.on("SIGINT", () => {
+    log("SYSTEM", "Shutting down...");
+    process.exit();
+});
 
 start();
