@@ -19,24 +19,14 @@ module.exports = async function commandHandler({ api, chat, event, args }) {
 
   const isGroup = event.threadID !== event.senderID;
   const threadSubprefix = isGroup ? getSubprefix(event.threadID) : null;
-  const usedPrefix = isGroup ? threadSubprefix || global.Tokito.subprefix : global.Tokito.subprefix;
+  const mainPrefix = global.Tokito.prefix;
+  const usedPrefix = isGroup ? threadSubprefix || mainPrefix : mainPrefix;
 
   if (!event.body.startsWith(usedPrefix)) return;
 
   const [commandNameOrAlias, ...commandArgs] = event.body.slice(usedPrefix.length).split(" ");
 
-  if (!global.Tokito.commands) {
-    console.error("Error: global.Tokito.commands is undefined.");
-    return;
-  }
-
   const commands = global.Tokito.commands;
-
-  if (commands.size === 0) {
-    console.error("Error: No commands are loaded in global.Tokito.commands.");
-    return;
-  }
-
   const command = commands.get(commandNameOrAlias) ||
     [...commands.values()].find(cmd => cmd.manifest.aliases?.includes(commandNameOrAlias));
 
