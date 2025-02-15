@@ -1,9 +1,10 @@
 const fs = require("fs-extra");
 const path = require("path");
 const fonts = require("./styler/createFonts");
-const route = require("./handler/apisHandler");
+const route = require("./apisHandler");
 
-const subprefixFile = path.join(__dirname, "System/handler/data/subprefixes.json");
+const subprefixFile = path.join(__dirname, "./data/subprefixes.json");
+
 
 function getSubprefix(threadID) {
   try {

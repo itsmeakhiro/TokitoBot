@@ -28,7 +28,6 @@ global.Tokito = {
 
 Object.assign(global.Tokito, {
     get prefix() { return global.Tokito.config.prefix; },
-    get subprefix() { return global.Tokito.config.subprefix; },
     get maintenance() { return global.Tokito.config.maintenance; },
     get developers() { return global.Tokito.config.developers; },
     get admins() { return global.Tokito.config.admins; },

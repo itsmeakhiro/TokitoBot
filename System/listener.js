@@ -5,7 +5,7 @@ const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
 
-const subprefixFile = path.join(__dirname, "System/handler/data/subprefixes.json");
+const subprefixFile = path.join(__dirname, "./handler/data/subprefixes.json");
 
 function getSubprefix(threadID) {
   try {
