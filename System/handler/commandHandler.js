@@ -24,7 +24,7 @@ module.exports = async function commandHandler({ api, chat, event, args }) {
 
   if (!event.body.startsWith(usedPrefix)) return;
 
-  const [commandNameOrAlias, ...commandArgs] = event.body.slice(usedPrefix.length).split(" ");
+  const [commandNameOrAlias, ...commandArgs] = event.body.slice(usedPrefix.length).trim().split(/\s+/);
 
   const commands = global.Tokito.commands;
   const command = commands.get(commandNameOrAlias) ||
@@ -35,11 +35,10 @@ module.exports = async function commandHandler({ api, chat, event, args }) {
       [...commands.values()].find(cmd => cmd.manifest.aliases?.includes("help"));
 
     const message = helpCommand
-      ? `Command "${commandNameOrAlias}" is not available. Use "${usedPrefix}help" to view commands.`
+      ? `Unknown command: "${commandNameOrAlias}". Use "${usedPrefix}help" to view available commands.`
       : `Unknown command: "${commandNameOrAlias}".`;
 
-    await chat.send(fonts.sans(message));
-    return;
+    return await chat.send(fonts.sans(message));
   }
 
   const senderID = event.senderID;
@@ -51,8 +50,7 @@ module.exports = async function commandHandler({ api, chat, event, args }) {
     const elapsed = Date.now() - lastUsed;
     if (elapsed < command.manifest.cooldown * 1000) {
       const remaining = ((command.manifest.cooldown * 1000 - elapsed) / 1000).toFixed(1);
-      await chat.send(fonts.sans(`Please wait ${remaining} seconds before using "${commandNameOrAlias}" again.`));
-      return;
+      return await chat.send(fonts.sans(`Please wait ${remaining} seconds before using "${commandNameOrAlias}" again.`));
     }
   }
 
