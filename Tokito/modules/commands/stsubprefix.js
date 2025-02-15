@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 const path = require("path");
 
-const subprefixFile = path.join(__dirname, "../../System/handler/data/subprefixes.json");
+const subprefixFile = path.join(__dirname, "../../../System/handler/data/subprefixes.json");
 
 function saveSubprefix(threadID, subprefix) {
     try {

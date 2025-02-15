@@ -5,7 +5,6 @@ const route = require("./apisHandler");
 
 const subprefixFile = path.join(__dirname, "./data/subprefixes.json");
 
-
 function getSubprefix(threadID) {
   try {
     const subprefixes = JSON.parse(fs.readFileSync(subprefixFile, "utf-8"));
@@ -26,7 +25,18 @@ module.exports = async function commandHandler({ api, chat, event, args }) {
 
   const [commandNameOrAlias, ...commandArgs] = event.body.slice(usedPrefix.length).split(" ");
 
+  if (!global.Tokito.commands) {
+    console.error("Error: global.Tokito.commands is undefined.");
+    return;
+  }
+
   const commands = global.Tokito.commands;
+
+  if (commands.size === 0) {
+    console.error("Error: No commands are loaded in global.Tokito.commands.");
+    return;
+  }
+
   const command = commands.get(commandNameOrAlias) ||
     [...commands.values()].find(cmd => cmd.manifest.aliases?.includes(commandNameOrAlias));
 

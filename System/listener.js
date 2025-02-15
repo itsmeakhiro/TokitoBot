@@ -1,27 +1,17 @@
-const fs = require("fs-extra");
-const path = require("path");
 const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
-
-const subprefixFile = path.join(__dirname, "./handler/data/subprefixes.json");
-
-function getSubprefix(threadID) {
-  try {
-    const subprefixes = JSON.parse(fs.readFileSync(subprefixFile, "utf-8"));
-    return subprefixes[threadID] || null;
-  } catch {
-    return null;
-  }
-}
+const subprefixes = require("./handler/data/subprefixes");
 
 module.exports = async function listener({ api, event }) {
+  const { prefix } = global.Tokito;
+
   if (!event.body) return;
 
   const isGroup = event.threadID !== event.senderID;
-  const threadSubprefix = isGroup ? getSubprefix(event.threadID) : null;
-  const usedPrefix = isGroup ? threadSubprefix || global.Tokito.subprefix : global.Tokito.subprefix;
+  const groupSubprefix = isGroup ? subprefixes[event.threadID] : null;
+  const usedPrefix = groupSubprefix || prefix;
 
   if (!event.body.startsWith(usedPrefix)) return;
 

@@ -9,9 +9,7 @@ function log(type, message) {
     ERROR: "\x1b[31m",
     RESET: "\x1b[0m",
   };
-  console.log(
-    `${colors[type] || colors.SYSTEM}[ ${type} ]${colors.RESET} ${message}`
-  );
+  console.log(`${colors[type] || colors.SYSTEM}[ ${type} ]${colors.RESET} ${message}`);
 }
 
 module.exports = {
@@ -27,7 +25,6 @@ module.exports = {
     for (const file of loadfiles) {
       const commandPath = path.join(filePath, file);
       const command = require(commandPath);
-
       const { manifest, deploy } = command ?? {};
 
       if (!manifest) {
@@ -49,6 +46,13 @@ module.exports = {
         if (manifest.name) {
           log("COMMAND", `Deployed ${manifest.name} successfully`);
           global.Tokito.commands.set(manifest.name, command);
+
+          if (Array.isArray(manifest.aliases)) {
+            for (const alias of manifest.aliases) {
+              global.Tokito.commands.set(alias, command);
+              log("COMMAND", `Alias "${alias}" registered for command "${manifest.name}"`);
+            }
+          }
         } else {
           log("ERROR", `Manifest missing 'name' for the command: ${file}`);
         }
