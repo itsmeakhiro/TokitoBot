@@ -29,24 +29,17 @@ module.exports = async function logger() {
         return;
     }
 
-    login({ appState: cookie }, async (err, api) => {
+    login({ appState: cookie }, {
+            listenEvents: config.fcaOptions.listenEvents,
+            selfListen: config.fcaOptions.selfListen,
+            bypassRegion: config.fcaOptions.bypassRegion,
+        }, async (err, api) => {
         if (err) {
             log("ERROR", `Login Failed: ${err.message}`);
             return;
         }
 
         log("SYSTEM", "Logged In Successfully...");
-
-        if (!config?.fcaOptions) {
-            log("ERROR", "Missing fcaOptions in config. Using default values.");
-        }
-
-        api.setOptions({
-            listenEvents: config.fcaOptions.listenEvents,
-            selfListen: config.fcaOptions.selfListen,
-            bypassRegion: config.fcaOptions.bypassRegion,
-        });
-
         try {
             const listener = require("./listener");
 
