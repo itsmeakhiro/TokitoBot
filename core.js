@@ -23,7 +23,7 @@ global.Tokito = {
     },
     commands: new Map(),
     events: new Map(),
-    cooldown: new Map()
+    cooldowns: new Map()
 },
 
 Object.assign(global.Tokito, {
