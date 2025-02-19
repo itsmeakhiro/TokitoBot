@@ -6,7 +6,7 @@ const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
 const subprefixes = require("./handler/data/subprefixes");
 
-const DEV_UID_PATH = path.join(__dirname, "System", "developer_uid.json");
+const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devsId.json");
 
 let savedDeveloperUID = null;
 if (fs.existsSync(DEV_UID_PATH)) {
