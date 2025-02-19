@@ -2,11 +2,10 @@ const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
-const styler = require("./handler/styler/styler");
 const subprefixes = require("./handler/data/subprefixes");
 
 module.exports = async function listener({ api, event }) {
-  const { prefix } = global.Tokito;
+  const { prefix, developers } = global.Tokito;
 
   if (!event.body) return;
 
@@ -85,8 +84,12 @@ module.exports = async function listener({ api, event }) {
     const admins = global.Tokito.config.admins || [];
     const moderators = global.Tokito.config.moderators || [];
 
-    const isAdmin = admins.includes(senderID);
-    const isModerator = moderators.includes(senderID);
+    function hasPermission(type) {
+      return developers?.includes(senderID) || (type === "admin" ? admins.includes(senderID) : moderators.includes(senderID) || admins.includes(senderID));
+    }
+
+    const isAdmin = hasPermission("admin");
+    const isModerator = hasPermission("moderator");
 
     if (config?.botAdmin && !isAdmin) {
       await chat.send(fonts.sans("Access denied, you don't have rights to use this admin-only command."));
