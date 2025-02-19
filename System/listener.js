@@ -2,6 +2,7 @@ const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
+const styler = require("./handler/styler/styler");
 const subprefixes = require("./handler/data/subprefixes");
 
 module.exports = async function listener({ api, event }) {
