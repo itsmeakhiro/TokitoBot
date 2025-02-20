@@ -1,5 +1,6 @@
 const fs = require("fs-extra");
 const path = require("path");
+const log = require("./System/logger");
 const express = require("express");
 const app = express();
 
@@ -33,16 +34,6 @@ Object.assign(global.Tokito, {
     get admins() { return global.Tokito.config.admins; },
     get moderator() { return global.Tokito.config.moderator; },
 });
-
-function log(type, message) {
-    const colors = {
-        SYSTEM: "\x1b[36m",
-        COMMAND: "\x1b[32m",
-        ERROR: "\x1b[31m",
-        RESET: "\x1b[0m",
-    };
-    console.log(`${colors[type] || colors.SYSTEM}[ ${type} ]${colors.RESET} ${message}`);
-}
 
 async function start() {
     app.listen(8080);
