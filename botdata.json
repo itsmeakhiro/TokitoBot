@@ -3,10 +3,9 @@
     "listenEvents": true,
     "bypassRegion": "PNB",
     "forceLogin": false,
-    "userAgent": ""
   },
   "prefix": ".",
-  "subprefix": "/",
+  "maintenance": false,
   "developers": [
     "61554222594723"
   ],
@@ -15,6 +14,5 @@
   ],
   "moderators": [
     ""
-  ],
-  "maintenance": false
+  ]
 }
