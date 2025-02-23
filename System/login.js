@@ -1,25 +1,28 @@
+const { execSync } = require("child_process");
 const login = require("ws3-fca");
+const log = require("./logger");
 const fs = require("fs-extra");
 const path = require("path");
 
 const { config } = global.Tokito;
 
-function log(type, message) {
-    const colors = {
-        TOP: "\x1b[32m",
-        SYSTEM: "\x1b[34m",
-        COMMAND: "\x1b[32m",
-        ERROR: "\x1b[31m",
-        RESET: "\x1b[0m",
-    };
-    console.log(`${colors[type] || colors.SYSTEM}[ ${type} ]${colors.RESET} ${message}`);
+async function installWs3Fca() {
+    try {
+        log("SYSTEM", "Installing latest ws3-fca...");
+        execSync("npm i ws3-fca@latest", { stdio: "inherit" });
+        log("SYSTEM", "ws3-fca installed successfully.");
+    } catch (error) {
+        log("ERROR", `Failed to install ws3-fca: ${error.message}`);
+    }
 }
 
 module.exports = async function logger() {
+    await installWs3Fca();
+
     let cookie;
     try {
         cookie = fs.readJSONSync(path.join(__dirname, "..", "cookies.json"));
-        
+
         if (!Array.isArray(cookie)) {
             log("ERROR", "cookies.json does not contain a valid array of cookies.");
             return;
@@ -30,10 +33,10 @@ module.exports = async function logger() {
     }
 
     login({ appState: cookie }, {
-            listenEvents: config.fcaOptions.listenEvents,
-            selfListen: config.fcaOptions.selfListen,
-            bypassRegion: config.fcaOptions.bypassRegion,
-        }, async (err, api) => {
+        listenEvents: config.fcaOptions.listenEvents,
+        selfListen: config.fcaOptions.selfListen,
+        bypassRegion: config.fcaOptions.bypassRegion,
+    }, async (err, api) => {
         if (err) {
             log("ERROR", `Login Failed: ${err.message}`);
             return;
