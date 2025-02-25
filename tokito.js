@@ -11,8 +11,48 @@ router.get("/postWReply", async (req, res) => {
   const event = new Event(req.query ?? {});
   event.messageID = `id_${crypto.randomUUID()}`;
 
-  const botResponse = await new Promise((resolve, reject) => {
+  const botResponse = await new Promise(async (resolve, reject) => {
     allResolve.set(event.messageID, resolve);
+    const apiFake = new Proxy(
+      {
+        sendMessage(form, _threadID, third) {
+          const nform = normalizeMessageForm(form);
+          const ll = {
+            body: nform.body,
+            messageID: `id_${crypto.randomUUID()}`,
+            timestamp: Date.now().toString(),
+          };
+          resolve(ll);
+          if (typeof third === "function") {
+            try {
+              third(ll);
+            } catch (error) {
+              console.error(error);
+            }
+          }
+        },
+      },
+      {
+        get(target, prop) {
+          if (prop in target) {
+            return target[prop];
+          }
+          return (...args) => {
+            console.log(
+              `Warn: 
+    api.${key}(${args
+                .map((i) => `[ ${typeof i} ${i?.constructor?.name || ""} ]`)
+                .join(",")}) has no effect!`
+            );
+          };
+        },
+      }
+    );
+    try {
+      await listener({ api: apiFake, event });
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   res.json(botResponse);
@@ -77,23 +117,27 @@ class Event {
   }
 }
 
-const apiFake = new Proxy(
-  {},
-  {
-    get(target, prop) {
-      if (prop in target) {
-        return target[prop];
-      }
-      return (...args) => {
-        console.log(
-          `Warn: 
-api.${key}(${args
-            .map((i) => `[ ${typeof i} ${i?.constructor?.name || ""} ]`)
-            .join(",")}) has no effect!`
-        );
-      };
-    },
-  }
-);
-
 module.exports = router;
+
+function normalizeMessageForm(form) {
+  let r = {};
+  if (form && r) {
+    if (typeof form === "object") {
+      r = form;
+    }
+
+    if (typeof form === "string") {
+      r = {
+        body: form,
+      };
+    }
+    if (!Array.isArray(r.attachment) && r.attachment) {
+      r.attachment = [r.attachment];
+    }
+    return r;
+  } else {
+    return {
+      body: undefined,
+    };
+  }
+}

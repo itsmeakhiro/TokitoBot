@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node core"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@types/node": "^18.0.6",
     "axios": "^1.7.9",
+    "cassidy-styler": "^1.2.2",
     "chatbox-fca-remake": "^4.3.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
