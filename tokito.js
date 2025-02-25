@@ -8,6 +8,14 @@ const listener = require("./System/listener");
 const allResolve = new Map();
 
 router.get("/postWReply", async (req, res) => {
+  if (!req.query.senderID) {
+    return res.json({
+      result: {
+        body: "❌ Please Enter your senderID on query. it allows any idenfitiers, please open your code.",
+      },
+      status: "success",
+    });
+  }
   const event = new Event(req.query ?? {});
   event.messageID = `id_${crypto.randomUUID()}`;
 
@@ -18,9 +26,12 @@ router.get("/postWReply", async (req, res) => {
         sendMessage(form, _threadID, third) {
           const nform = normalizeMessageForm(form);
           const ll = {
-            body: nform.body,
-            messageID: `id_${crypto.randomUUID()}`,
-            timestamp: Date.now().toString(),
+            result: {
+              body: nform.body,
+              messageID: `id_${crypto.randomUUID()}`,
+              timestamp: Date.now().toString(),
+            },
+            status: "success",
           };
           resolve(ll);
           if (typeof third === "function") {
