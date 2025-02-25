@@ -1,11 +1,14 @@
 const fs = require("fs-extra");
 const path = require("path");
 const log = require("./System/logger");
+const tokito = require("./tokito");
 const express = require("express");
 const app = express();
 
 process.on("unhandledRejection", (error) => log("ERROR", error.stack));
 process.on("uncaughtException", (error) => log("ERROR", error.stack));
+
+app.use("", tokito);
 
 global.Tokito = {
     get config(){
