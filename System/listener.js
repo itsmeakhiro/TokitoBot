@@ -56,8 +56,16 @@ module.exports = async function listener({ api, event }) {
     send: (message, goal) => {
       return new Promise((res, rej) => {
         api.sendMessage(message, goal || event.threadID, (err) => {
-          if (err) rej(err);
-          else res(true);
+          if (err) {
+            rej(err);
+          } else {
+            res(true);
+
+            const resolve = global.allResolve.get(event.messageID);
+            if (resolve) {
+              resolve({ body: message });
+            }
+          }
         });
       });
     },
@@ -73,18 +81,15 @@ module.exports = async function listener({ api, event }) {
       return new Promise((resolve, reject) => {
         api.createPost({ body: body || "", attachment: attachment || [] }, (error, data) => {
           if (error) {
-            console.error("Facebook Post Error:", error);
             reject({ success: false, message: "Failed to create post", error });
             return;
           }
 
           if (!data?.data || data.errors) {
-            console.error("Unexpected API Response:", data);
             reject({ success: false, message: "API returned an error", data });
             return;
           }
 
-          console.log("Post Successful:", data);
           resolve({ success: true, data });
         });
       });
