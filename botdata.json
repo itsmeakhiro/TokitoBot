@@ -2,7 +2,7 @@
   "fcaOptions": {
     "listenEvents": true,
     "bypassRegion": "PNB",
-    "forceLogin": false,
+    "forceLogin": false
   },
   "prefix": ".",
   "maintenance": false,
