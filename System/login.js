@@ -5,7 +5,6 @@ const fs = require("fs-extra");
 const path = require("path");
 
 const { config } = global.Tokito;
-const appStateDir = path.join(__dirname, "..", "System", "handler", "data");
 
 async function installWs3Fca() {
     try {
@@ -17,59 +16,23 @@ async function installWs3Fca() {
     }
 }
 
-async function getAppState() {
-    try {
-        fs.ensureDirSync(appStateDir);
-
-        const files = await fs.readdir(appStateDir);
-        if (files.length > 0) {
-            const filePath = path.join(appStateDir, files[0]);
-            log("SYSTEM", `Using appState from ${filePath}`);
-            return fs.readJSON(filePath);
-        }
-
-        log("SYSTEM", "No appState found in handler/data, falling back to cookies.json.");
-        const cookiePath = path.join(__dirname, "..", "cookies.json");
-
-        if (fs.existsSync(cookiePath)) {
-            return fs.readJSON(cookiePath);
-        }
-
-        log("ERROR", "No valid appState found.");
-        return null;
-    } catch (error) {
-        log("ERROR", `Failed to load appState: ${error.message}`);
-        return null;
-    }
-}
-
-async function saveAppState(api) {
-    try {
-        const appState = api.getAppState();
-        const uid = appState.find(item => item.key === "c_user")?.value;
-        if (!uid) {
-            log("ERROR", "Failed to save appState: No UID found.");
-            return;
-        }
-
-        const filePath = path.join(appStateDir, `${uid}.json`);
-        await fs.writeJSON(filePath, appState, { spaces: 2 });
-        log("SYSTEM", `AppState saved for UID: ${uid}`);
-    } catch (error) {
-        log("ERROR", `Failed to save appState: ${error.message}`);
-    }
-}
-
 module.exports = async function logger() {
     await installWs3Fca();
 
-    const appState = await getAppState();
-    if (!appState || !Array.isArray(appState)) {
-        log("ERROR", "No valid appState available for login.");
+    let cookie;
+    try {
+        cookie = fs.readJSONSync(path.join(__dirname, "..", "cookies.json"));
+
+        if (!Array.isArray(cookie)) {
+            log("ERROR", "cookies.json does not contain a valid array of cookies.");
+            return;
+        }
+    } catch (err) {
+        log("ERROR", "Failed to read cookies.json");
         return;
     }
 
-    login({ appState }, {
+    login({ appState: cookie }, {
         listenEvents: config.fcaOptions.listenEvents,
         selfListen: config.fcaOptions.selfListen,
         bypassRegion: config.fcaOptions.bypassRegion,
@@ -80,8 +43,6 @@ module.exports = async function logger() {
         }
 
         log("SYSTEM", "Logged In Successfully...");
-        await saveAppState(api); // Save new appState after login
-
         try {
             const listener = require("./listener");
 
