@@ -33,6 +33,7 @@ global.Tokito = {
 Object.assign(global.Tokito, {
     get prefix() { return global.Tokito.config.prefix; },
     get maintenance() { return global.Tokito.config.maintenance; },
+    get antitheft() { return global.Tokito.config.antitheft; },
     get developers() { return global.Tokito.config.developers; },
     get admins() { return global.Tokito.config.admins; },
     get moderator() { return global.Tokito.config.moderator; },
