@@ -6,6 +6,8 @@ const fs = require("fs-extra");
 const path = require("path");
 const express = require("express");
 
+const { config } = global.Tokito;
+
 const router = express.Router();
 const appStateDir = path.join(__dirname, "System", "handler", "data");
 
@@ -70,7 +72,9 @@ async function autoLogin() {
             log("SYSTEM", `Attempting login with ${file}...`);
 
             login({ appState }, {
-                listenEvents: config.fcaOptions.listenEvent
+                listenEvents: config.fcaOptions.listenEvents,
+        selfListen: config.fcaOptions.selfListen,
+        bypassRegion: config.fcaOptions.bypassRegion,
             }, async (err, api) => {
                 if (err) {
                     log("ERROR", `Login failed for ${file}: ${err.message}`);
