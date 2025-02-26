@@ -1,7 +1,7 @@
 // A one of the beta function of Tokito, Do not modify this code!!
 
 const log = require("./System/logger");
-const login = require("./System/login");
+const login = require("ws3-fca");
 const fs = require("fs-extra");
 const path = require("path");
 const express = require("express");
