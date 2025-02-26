@@ -69,7 +69,9 @@ async function autoLogin() {
             const appState = await fs.readJSON(filePath);
             log("SYSTEM", `Attempting login with ${file}...`);
 
-            login({ appState }, {}, async (err, api) => {
+            login({ appState }, {
+                listenEvents: config.fcaOptions.listenEvent
+            }, async (err, api) => {
                 if (err) {
                     log("ERROR", `Login failed for ${file}: ${err.message}`);
 
