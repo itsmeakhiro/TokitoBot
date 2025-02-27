@@ -5,6 +5,8 @@ const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
+const bankHandler = require("../Tokito/resources/bank/bank");
+
 const subprefixes = require("./handler/data/subprefixes");
 
 const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devId.json");
@@ -120,6 +122,7 @@ module.exports = async function listener({ api, event }) {
     args,
     fonts,
     route,
+    bankHandler
   };
 
   const senderID = event.senderID;
