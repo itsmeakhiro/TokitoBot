@@ -123,7 +123,8 @@ module.exports = async function listener({ api, event }) {
     args,
     fonts,
     route,
-    bankHandler
+    bankHandler,
+    balanceHandler,
   };
 
   const senderID = event.senderID;
