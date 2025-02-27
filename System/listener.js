@@ -6,8 +6,8 @@ const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const route = require("./handler/apisHandler");
 
-const bankHandler = require(path.join(__dirname, "../../Tokito/resources/bank/utils"));
-const balanceHandler = require(path.join(__dirname, "../../Tokito/resources/balance/utils"));
+const bankHandler = require(path.join(__dirname, "../Tokito/resources/bank/utils"));
+const balanceHandler = require(path.join(__dirname, "../Tokito/resources/balance/utils"));
 const subprefixes = require("./handler/data/subprefixes");
 
 const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devId.json");
