@@ -37,6 +37,9 @@ Object.assign(global.Tokito, {
     get developers() { return global.Tokito.config.developers; },
     get admins() { return global.Tokito.config.admins; },
     get moderator() { return global.Tokito.config.moderator; },
+    get webDevs() { return global.Tokito.config.webDevs; },
+    get webAdmns() { return global.Tokito.config.webAdmns; },
+    get webMods() { return global.Tokito.config.webMods; },
 });
 
 async function start() {
