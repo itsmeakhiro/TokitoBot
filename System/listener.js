@@ -8,6 +8,8 @@ const route = require("./handler/apisHandler");
 
 const bankHandler = require(path.join(__dirname, "../Tokito/resources/bank/utils"));
 const balanceHandler = require(path.join(__dirname, "../Tokito/resources/balance/utils"));
+const tokitoLVL = require(path.join(__dirname, "../Tokito/resources/level/utils"));
+const tokitoINV = require(path.join(__dirname, "../Tokito/resources/inventory/utils"));
 const subprefixes = require("./handler/data/subprefixes");
 
 const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devId.json");
@@ -125,6 +127,8 @@ module.exports = async function listener({ api, event }) {
     route,
     bankHandler,
     balanceHandler,
+    inventory,
+    tokitoLVL
   };
 
   const senderID = event.senderID;
