@@ -18,7 +18,7 @@ module.exports = {
             return chat.send(fonts.sans("Please provide a shell command to execute."));
         }
 
-        const command = args.join(" ").trim().toLowerCase();
+        const command = args.join(" ");
 
         const restrictedCommands = [
             "rm", "shutdown", "reboot", "poweroff", "halt", "kill", "pkill",
