@@ -4,6 +4,7 @@ const log = require("./logger");
 const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
+const styler = require("./handler/styler");
 const route = require("./handler/apisHandler");
 
 const bankHandler = require(path.join(__dirname, "../Tokito/resources/bank/utils"));
