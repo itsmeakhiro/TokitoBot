@@ -28,9 +28,9 @@ ${footer}
     case "design":
       return `
 ${title}
-━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━
 ${content}
-${footer ? `━━━━━━━━━━━━━━━\n${footer}` : ""}
+${footer ? `━━━━━━━━━━━━━━━━━━━\n${footer}` : ""}
       `.trim();
 
     default:
