@@ -4,7 +4,7 @@ const fonts = require("./styler/createFonts");
 const route = require("./apisHandler");
 
 const subprefixFile = path.join(__dirname, "./data/subprefixes.json");
-const attachmentPath = path.join(__dirname, "./data/attachment/attachment.gif");
+const attachmentPath = path.join(__dirname, "./data/attachment/prefix.gif");
 
 function getSubprefix(threadID) {
   try {
