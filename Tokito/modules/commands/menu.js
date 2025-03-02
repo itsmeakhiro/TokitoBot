@@ -19,10 +19,10 @@ module.exports = {
     content: "sans",
     footer: "sans",
   },
-  async deploy({ chat }) {
-    const commandsDir = __dirname;
-    const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith(".js"));
-    const commandList = commandFiles.join("\n │");
-    await chat.send(commandList);
+  async deploy({ chat }) {  
+    const commandsDir = __dirname;  
+    const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith(".js"));  
+    const commandList = commandFiles.map(file => `│ ${file}`).join("\n");  
+    await chat.send(commandList);  
   }
 };
