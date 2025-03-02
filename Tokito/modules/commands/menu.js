@@ -10,7 +10,7 @@ module.exports = {
     }
   },
   style: {
-    type: "design2",
+    type: "Hdesign",
     title: "Help",
     footer: "Test",
   },
