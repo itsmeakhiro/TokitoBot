@@ -15,11 +15,10 @@ module.exports = {
   },
   style: {
     type: "design",
-    title: "🔗 CLI Tester",
+    title: "⏤͟͟͞͞   𝗖𝗟𝗜 𝖳𝖾𝗌𝗍𝖾𝗋",
     footer: "ℹ️ This is meant for educational or for API testing only. Use it at your own risk."
   },
   font: {
-    title: "bold",
     content: "sans",
     footer: "sans",
   },
