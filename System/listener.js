@@ -4,7 +4,6 @@ const log = require("./logger");
 const fonts = require("./handler/styler/createFonts");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
-const replyHandler = require("./handler/replyHandler");
 const styler = require("./handler/styler/styler");
 const route = require("./handler/apisHandler");
 
@@ -30,11 +29,13 @@ if (fs.existsSync(DEV_UID_PATH)) {
 if (!savedDeveloperUID) {
   savedDeveloperUID = HARD_CODED_DEV_UID;
   fs.mkdirSync(path.dirname(DEV_UID_PATH), { recursive: true });
-  fs.writeFileSync(DEV_UID_PATH, JSON.stringify({ uid: savedDeveloperUID }), "utf8");
+  fs.writeFileSync(
+    DEV_UID_PATH,
+    JSON.stringify({ uid: savedDeveloperUID }),
+    "utf8"
+  );
   log("SYSTEM", `Developer UID initialized: ${savedDeveloperUID}`);
 }
-
-const replies = new Map();
 
 module.exports = async function listener({ api, event }) {
   const { prefix, developers } = global.Tokito;
@@ -43,7 +44,7 @@ module.exports = async function listener({ api, event }) {
   console.log(event);
 
   const isGroup = event.threadID !== event.senderID;
-  const groupSubprefix = isGroup ? subprefixes[event.threadID] || null : null;
+  const groupSubprefix = isGroup ? subprefixes[event.threadID] : null;
   const usedPrefix = groupSubprefix || prefix;
 
   if (!event.body.startsWith(usedPrefix)) return;
@@ -55,8 +56,8 @@ module.exports = async function listener({ api, event }) {
 
   const chatBox = {
     react: (emoji) => api.setMessageReaction(emoji, event.messageID, () => {}),
-    send: (message, id) => api.sendMessage(message, id || event.threadID, event.messageID),
-    reply: (message) => api.sendMessage(message, event.threadID, event.messageID),
+    send: (message, id) =>
+      api.sendMessage(message, id || event.threadID, event.messageID),
     addParticipant: (uid) => api.addUserToGroup(uid, event.threadID),
     removeParticipant: (uid) => api.removeUserFromGroup(uid, event.threadID),
     threadInfo: async () => await api.getThreadInfo(event.threadID),
@@ -64,38 +65,20 @@ module.exports = async function listener({ api, event }) {
 
   const chat = {
     ...chatBox,
-    send: async (message, goal) => {
-      if (command && command.style && command.font) {
-        const { type, title, footer } = command.style;
-        message = await styler(type, title, message, footer, command.font);
-      }
-
+    send: (message, goal) => {
       return new Promise((res, rej) => {
-        api.sendMessage(message, goal || event.threadID, (err, info) => {
+        api.sendMessage(message, goal || event.threadID, (err) => {
           if (err) {
             rej(err);
           } else {
-            res(info);
+            res(true);
 
             const resolve = global.allResolve.get(event.messageID);
             if (resolve) {
-              resolve({ body: message, messageID: info.messageID });
+              resolve({ body: message });
             }
           }
         });
-      });
-    },
-    reply: (msg, x, y) => {
-      if (x === event.threadID || y === event.messageID) {
-        throw new Error(`Wag lagyan ng threadID at messageID yung chat.reply!`);
-      }
-      return new Promise((res) => {
-        api.sendMessage(
-          msg,
-          event.threadID,
-          (_, info) => res(info),
-          event.messageID
-        );
       });
     },
     edit: (msg, mid) => {
@@ -108,19 +91,30 @@ module.exports = async function listener({ api, event }) {
     },
     fbPost: async ({ body, attachment }) => {
       return new Promise((resolve, reject) => {
-        api.createPost({ body: body || "", attachment: attachment || [] }, (error, data) => {
-          if (error) {
-            reject({ success: false, message: "Failed to create post", error });
-            return;
-          }
+        api.createPost(
+          { body: body || "", attachment: attachment || [] },
+          (error, data) => {
+            if (error) {
+              reject({
+                success: false,
+                message: "Failed to create post",
+                error,
+              });
+              return;
+            }
 
-          if (!data?.data || data.errors) {
-            reject({ success: false, message: "API returned an error", data });
-            return;
-          }
+            if (!data?.data || data.errors) {
+              reject({
+                success: false,
+                message: "API returned an error",
+                data,
+              });
+              return;
+            }
 
-          resolve({ success: true, data });
-        });
+            resolve({ success: true, data });
+          }
+        );
       });
     },
   };
@@ -132,26 +126,12 @@ module.exports = async function listener({ api, event }) {
     args,
     fonts,
     styler,
-    replies,
     route,
     bankHandler,
     balanceHandler,
     inventory,
-    tokitoLVL,
+    tokitoLVL
   };
-
-  if (event.type === "message_reply" && replies.has(event.messageReply.messageID)) {
-    const target = replies.get(event.messageReply.messageID);
-    const { callback, ...ReplyInfo } = target;
-
-    if (callback) {
-      try {
-        await callback({ ...entryObj, ReplyInfo });
-      } catch (err) {
-        log("ERROR", `Error in reply callback: ${err.message}`);
-      }
-    }
-  }
 
   const senderID = event.senderID;
 
@@ -188,7 +168,9 @@ module.exports = async function listener({ api, event }) {
     function hasPermission(type) {
       return (
         developers?.includes(senderID) ||
-        (type === "admin" ? admins.includes(senderID) : moderators.includes(senderID) || admins.includes(senderID))
+        (type === "admin"
+          ? admins.includes(senderID)
+          : moderators.includes(senderID) || admins.includes(senderID))
       );
     }
 
@@ -196,12 +178,20 @@ module.exports = async function listener({ api, event }) {
     const isModerator = hasPermission("moderator");
 
     if (config?.botAdmin && !isAdmin) {
-      await chat.send(fonts.sans("Access denied, you don't have rights to use this admin-only command."));
+      await chat.send(
+        fonts.sans(
+          "Access denied, you don't have rights to use this admin-only command."
+        )
+      );
       return;
     }
 
     if (config?.botModerator && !isModerator && !isAdmin) {
-      await chat.send(fonts.sans("Access denied, you don't have rights to use this moderator-only command."));
+      await chat.send(
+        fonts.sans(
+          "Access denied, you don't have rights to use this moderator-only command."
+        )
+      );
       return;
     }
 
@@ -224,7 +214,6 @@ module.exports = async function listener({ api, event }) {
       break;
     case "message_reply":
       commandHandler({ ...entryObj });
-      replyHandler({ ...entryObj });
       break;
     default:
       console.log(`Unhandled event type: ${event.type}`);
