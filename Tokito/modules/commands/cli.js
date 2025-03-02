@@ -29,14 +29,27 @@ module.exports = {
     if (input.startsWith("http")) {
       try {
         const response = await axios.get(input);
-        return chat.send(`Response:\n${JSON.stringify(response.data, null, 2)}`);
+        let data = response.data;
+
+        if (typeof data !== "string") {
+          data = JSON.stringify(data, null, 2);
+        }
+
+        return chat.send(`Response:\n${data}`);
       } catch (error) {
         return chat.send(`Error fetching API:\n${error.message}`);
       }
     }
 
     try {
-      const result = eval(input);
+      let result = eval(input);
+
+      if (typeof result === "undefined") {
+        result = "undefined";
+      } else if (typeof result !== "string") {
+        result = JSON.stringify(result, null, 2);
+      }
+
       return chat.send(`Result:\n${result}`);
     } catch (err) {
       return chat.send(`Error:\n${err.message}`);
