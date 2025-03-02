@@ -4,6 +4,7 @@ const fonts = require("./styler/createFonts");
 const route = require("./apisHandler");
 
 const subprefixFile = path.join(__dirname, "./data/subprefixes.json");
+const attachmentPath = path.join(__dirname, "./data/attachment/attachment.gif");
 
 function getSubprefix(threadID) {
   try {
@@ -22,7 +23,25 @@ module.exports = async function commandHandler({ api, chat, event, args }) {
   const mainPrefix = global.Tokito.prefix;
   const usedPrefix = isGroup ? threadSubprefix || mainPrefix : mainPrefix;
 
-  if (!event.body.startsWith(usedPrefix)) return;
+  if (!event.body.startsWith(usedPrefix)) {
+    const loweredBody = event.body.trim().toLowerCase();
+
+    if (loweredBody === "prefix") {
+      let response = fonts.monospace(
+        `▀█▀ █▀█ █▄▀ █ ▀█▀ █▀█
+         ░█░ █▄█ █░█ █ ░█░ █▄█`
+      );
+
+      response += `\nSYSTEM PREFIX: ${mainPrefix}`;
+      if (threadSubprefix) response += `\nYOUR GC PREFIX: ${threadSubprefix}`;
+
+      return await chat.send({
+        body: response,
+        attachment: fs.createReadStream(attachmentPath)
+      });
+    }
+    return;
+  }
 
   const [commandNameOrAlias, ...commandArgs] = event.body.slice(usedPrefix.length).trim().split(/\s+/);
 
