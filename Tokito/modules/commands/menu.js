@@ -22,7 +22,17 @@ module.exports = {
   async deploy({ chat }) {  
     const commandsDir = __dirname;  
     const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith(".js"));  
-    const commandList = commandFiles.map(file => `│ ${file}`).join("\n");  
+
+    const commandNames = commandFiles.map(file => {  
+      try {  
+        const command = require(path.join(commandsDir, file));  
+        return command.manifest?.name ? `│${command.manifest.name}` : null;  
+      } catch (err) {  
+        return null;  
+      }  
+    }).filter(Boolean);  
+
+    const commandList = commandNames.join("\n");  
     await chat.send(commandList);  
   }
 };
