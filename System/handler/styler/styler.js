@@ -10,14 +10,11 @@ module.exports = function styler(type, title, content, footer, styles = {}) {
   }
 
   title = applyFont(title, styles.title);
-  content = content
-    .split("\n")
-    .map(line => `│ ${applyFont(line, styles.content)}`)
-    .join("\n");
+  content = applyFont(content, styles.content);
   footer = applyFont(footer, styles.footer);
 
   switch (type) {
-    case "design2":
+    case "Hdesign":
       return `
 ╭─────────────❍
 │ ${title}
@@ -26,6 +23,14 @@ ${content}
 ├────────⬤
 │ ${footer}
 ╰─────────────❍
+      `.trim();
+
+    case "design2":
+      return `
+${title}
+━━━━━━━━━━━━━━━
+${content}
+${footer ? `━━━━━━━━━━━━━━━\n${footer}` : ""}
       `.trim();
 
     default:
