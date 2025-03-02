@@ -15,6 +15,7 @@ module.exports = {
   style: {
     type: "design",
     title: "CLI Tester",
+    footer: "This command is for educational purposes only."
   },
   font: {
     title: ["bold", "Sans"],
