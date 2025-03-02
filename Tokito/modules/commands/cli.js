@@ -1,4 +1,5 @@
 const axios = require("axios");
+const util = require("util");
 
 module.exports = {
   manifest: {
@@ -8,17 +9,16 @@ module.exports = {
     description: "Test APIs or execute JavaScript code",
     usage: "cli curl <URL> | cli eval <code>",
     config: {
-      botAdmin: false,
+      botAdmin: true,
       botModerator: false,
     }
   },
   style: {
     type: "design",
     title: "CLI Tester",
-    footer: "This command is for educational purposes only."
   },
   font: {
-    title: ["bold", "Sans"],
+    title: "Sans",
     content: "sans",
     footer: "sans",
   },
@@ -41,7 +41,9 @@ module.exports = {
             data = JSON.stringify(data, null, 2);
           }
 
-          return chat.send(`Response:\n${data}`);
+          if (!data) return;
+
+          return chat.send(`Response:\n${data.slice(0, 2000)}`);
         } catch (error) {
           return chat.send(`Error fetching API:\n${error.message}`);
         }
@@ -49,11 +51,16 @@ module.exports = {
       case "eval":
         try {
           let result = eval(input);
-          if (typeof result === "undefined") result = "undefined";
-          else if (typeof result !== "string") result = JSON.stringify(result, null, 2);
-          return chat.send(`Result:\n${result}`);
-        } catch (err) {
-          return chat.send(`Error:\n${err.message}`);
+
+          if (typeof result !== "string") {
+            result = util.inspect(result);
+          }
+
+          if (!result || result.trim() === "") return;
+
+          return chat.send(`Output:\n${result.slice(0, 2000)}`);
+        } catch (error) {
+          return chat.send(`Error:\n${error.message}`);
         }
 
       default:
