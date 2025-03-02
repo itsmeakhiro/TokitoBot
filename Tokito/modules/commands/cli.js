@@ -3,7 +3,7 @@ const axios = require("axios");
 module.exports = {
   manifest: {
     name: "cli",
-    aliases: ["eval", "test"],
+    aliases: ["test"],
     developer: "Francis Loyd Raval",
     description: "Execute JavaScript code or test APIs",
     usage: "cli <code or API URL>",
