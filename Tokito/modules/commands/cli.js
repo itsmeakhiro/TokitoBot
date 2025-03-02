@@ -22,15 +22,14 @@ module.exports = {
     content: "sans",
     footer: "sans",
   },
-  async deploy({ chat, args, fonts }) {
+  async deploy({ chat, args, fonts, event, api }) {
     if (args.length < 2) {
-      return chat.send(`
-Welcome to ${fonts.bold("CLI")} Tester made by Francis Loyd Raval, Here's some function(s) that may help you
+      return chat.send(`Welcome to ${fonts.bold("CLI")} Tester made by Francis Loyd Raval, Here's some function(s) that may help you
       
  ⦿ ${fonts.bold("curl")} use to test your personalized or someone's ${fonts.bold("API")}.
   ${fonts.bold("USAGE: ")} curl [ API LINK WITH THE ENDPOINT ]
       
-⦿ ${fonts.bold("eval")} use to evaluate or to test your JavaScript codes using the Tokito Functions.
+ ⦿ ${fonts.bold("eval")} use to evaluate or to test your JavaScript codes using the Tokito Functions.
   ${fonts.bold("USAGE: ")} eval [ JavaScript Code ]
       
 ℹ️ This is meant for educational or for API testing only. Use it at your own risk.`);
