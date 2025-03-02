@@ -16,15 +16,24 @@ module.exports = {
   style: {
     type: "design",
     title: "⏤͟͟͞͞   𝗖𝗟𝗜 𝖳𝖾𝗌𝗍𝖾𝗋",
-    footer: "ℹ️ This is meant for educational or for API testing only. Use it at your own risk."
+    footer: "Developed By: Francis Loyd Raval"
   },
   font: {
     content: "sans",
     footer: "sans",
   },
-  async deploy({ chat, args }) {
+  async deploy({ chat, args, fonts }) {
     if (args.length < 2) {
-      return chat.send("Usage:\ncli curl <API URL>\ncli eval <JavaScript Code>");
+      return chat.send(`
+      Welcome to ${fonts.bold("CLI")} Tester made by Francis Loyd Raval, Here's some function(s) that may help you
+      
+      ⦿ ${fonts.bold("curl")} use to test your personalized or someone's ${fonts.bold("API")}.
+      ${fonts.bold("USAGE: ")} curl [ API LINK WITH THE ENDPOINT ]
+      
+      ⦿ ${fonts.bold("eval")} use to evaluate or to test your JavaScript codes using the Tokito Functions.
+      ${fonts.bold("USAGE: ")} eval [ JavaScript Code ]
+      
+      ℹ️ This is meant for educational or for API testing only. Use it at your own risk.`);
     }
 
     const command = args.shift().toLowerCase();
