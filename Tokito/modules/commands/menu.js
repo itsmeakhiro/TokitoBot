@@ -22,7 +22,7 @@ module.exports = {
   async deploy({ chat }) {
     const commandsDir = __dirname;
     const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith(".js"));
-    const commandList = commandFiles.join("| \n");
+    const commandList = commandFiles.join("\n |");
     await chat.send(commandList);
   }
 };
