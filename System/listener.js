@@ -34,6 +34,8 @@ if (!savedDeveloperUID) {
   log("SYSTEM", `Developer UID initialized: ${savedDeveloperUID}`);
 }
 
+const replies = new Map();
+
 module.exports = async function listener({ api, event }) {
   const { prefix, developers } = global.Tokito;
 
@@ -41,7 +43,7 @@ module.exports = async function listener({ api, event }) {
   console.log(event);
 
   const isGroup = event.threadID !== event.senderID;
-  const groupSubprefix = isGroup ? subprefixes[event.threadID] : null;
+  const groupSubprefix = isGroup ? subprefixes[event.threadID] || null : null;
   const usedPrefix = groupSubprefix || prefix;
 
   if (!event.body.startsWith(usedPrefix)) return;
@@ -54,6 +56,7 @@ module.exports = async function listener({ api, event }) {
   const chatBox = {
     react: (emoji) => api.setMessageReaction(emoji, event.messageID, () => {}),
     send: (message, id) => api.sendMessage(message, id || event.threadID, event.messageID),
+    reply: (message) => api.sendMessage(message, event.threadID, event.messageID),
     addParticipant: (uid) => api.addUserToGroup(uid, event.threadID),
     removeParticipant: (uid) => api.removeUserFromGroup(uid, event.threadID),
     threadInfo: async () => await api.getThreadInfo(event.threadID),
@@ -80,6 +83,19 @@ module.exports = async function listener({ api, event }) {
             }
           }
         });
+      });
+    },
+    reply: (msg, x, y) => {
+      if (x === event.threadID || y === event.messageID) {
+        throw new Error(`Wag lagyan ng threadID at messageID yung chat.reply!`);
+      }
+      return new Promise((res) => {
+        api.sendMessage(
+          msg,
+          event.threadID,
+          (_, info) => res(info),
+          event.messageID
+        );
       });
     },
     edit: (msg, mid) => {
@@ -116,12 +132,26 @@ module.exports = async function listener({ api, event }) {
     args,
     fonts,
     styler,
+    replies,
     route,
     bankHandler,
     balanceHandler,
     inventory,
     tokitoLVL,
   };
+
+  if (event.type === "message_reply" && replies.has(event.messageReply.messageID)) {
+    const target = replies.get(event.messageReply.messageID);
+    const { callback, ...ReplyInfo } = target;
+
+    if (callback) {
+      try {
+        await callback({ ...entryObj, ReplyInfo });
+      } catch (err) {
+        log("ERROR", `Error in reply callback: ${err.message}`);
+      }
+    }
+  }
 
   const senderID = event.senderID;
 
@@ -194,7 +224,7 @@ module.exports = async function listener({ api, event }) {
       break;
     case "message_reply":
       commandHandler({ ...entryObj });
-      replyHandler({ ...entryObj })
+      replyHandler({ ...entryObj });
       break;
     default:
       console.log(`Unhandled event type: ${event.type}`);
