@@ -5,8 +5,8 @@ module.exports = {
     name: "cli",
     aliases: ["test"],
     developer: "Francis Loyd Raval",
-    description: "Execute JavaScript code or test APIs",
-    usage: "cli <code or API URL>",
+    description: "Test APIs or execute JavaScript code",
+    usage: "cli curl <URL> | cli eval <code>",
     config: {
       botAdmin: false,
       botModerator: false,
@@ -22,37 +22,41 @@ module.exports = {
     footer: "sans",
   },
   async deploy({ chat, args }) {
-    if (args.length === 0) return chat.send("Please provide code or an API URL to test.");
-
-    const input = args.join(" ");
-
-    if (input.startsWith("http")) {
-      try {
-        const response = await axios.get(input);
-        let data = response.data;
-
-        if (typeof data !== "string") {
-          data = JSON.stringify(data, null, 2);
-        }
-
-        return chat.send(`Response:\n${data}`);
-      } catch (error) {
-        return chat.send(`Error fetching API:\n${error.message}`);
-      }
+    if (args.length < 2) {
+      return chat.send("Usage:\ncli curl <API URL>\ncli eval <JavaScript Code>");
     }
 
-    try {
-      let result = eval(input);
+    const command = args.shift().toLowerCase();
+    const input = args.join(" ");
 
-      if (typeof result === "undefined") {
-        result = "undefined";
-      } else if (typeof result !== "string") {
-        result = JSON.stringify(result, null, 2);
-      }
+    switch (command) {
+      case "curl":
+        if (!input.startsWith("http")) return chat.send("Invalid URL.");
+        try {
+          const response = await axios.get(input);
+          let data = response.data;
 
-      return chat.send(`Result:\n${result}`);
-    } catch (err) {
-      return chat.send(`Error:\n${err.message}`);
+          if (typeof data !== "string") {
+            data = JSON.stringify(data, null, 2);
+          }
+
+          return chat.send(`Response:\n${data}`);
+        } catch (error) {
+          return chat.send(`Error fetching API:\n${error.message}`);
+        }
+
+      case "eval":
+        try {
+          let result = eval(input);
+          if (typeof result === "undefined") result = "undefined";
+          else if (typeof result !== "string") result = JSON.stringify(result, null, 2);
+          return chat.send(`Result:\n${result}`);
+        } catch (err) {
+          return chat.send(`Error:\n${err.message}`);
+        }
+
+      default:
+        return chat.send("Unknown command. Use `cli curl <URL>` or `cli eval <code>`.");
     }
   }
 };
