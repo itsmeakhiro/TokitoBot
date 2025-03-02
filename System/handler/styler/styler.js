@@ -16,16 +16,16 @@ module.exports = function styler(type, title, content, footer, styles = {}) {
   switch (type) {
     case "Hdesign":
       return `
-╭─────────────❍
-│ ${title}
-│────────────────
-${content}
-├────────⬤
-│ ${footer}
-╰─────────────❍
-      `.trim();
+${title}
 
-    case "design2":
+╭────────────
+${content}
+╰────────────
+
+${footer}
+     `.trim();
+
+    case "design":
       return `
 ${title}
 ━━━━━━━━━━━━━━━
