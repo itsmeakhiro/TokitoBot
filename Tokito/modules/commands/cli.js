@@ -22,7 +22,7 @@ module.exports = {
     content: "sans",
     footer: "sans",
   },
-  async deploy({ chat, args, fonts, event, api }) {
+  async deploy({ chat, args, fonts, event, api, replies }) {
     if (args.length < 2) {
       return chat.send(`Welcome to ${fonts.bold("CLI")} Tester made by Francis Loyd Raval, Here's some function(s) that may help you
       
