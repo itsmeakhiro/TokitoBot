@@ -59,10 +59,13 @@ module.exports = async function listener({ api, event }) {
   const groupSubprefix = isGroup ? subprefixes[event.threadID] : null;
   const usedPrefix = groupSubprefix || prefix;
 
-  if (!event.body.startsWith(usedPrefix)) return;
-
-  let [commandName, ...args] = event.body.slice(usedPrefix.length).split(" ");
+  //if (!event.body.startsWith(usedPrefix)) return;
+  let hasPrefix = event.body.startsWith(usedPrefix);
+  let [commandName, ...args] = event.body.split(" ");
   commandName = commandName.toLowerCase();
+  if (hasPrefix) {
+    commandName = commandName.slice(usedPrefix.length);
+  }
 
   const command = global.Tokito.commands.get(commandName);
 
@@ -183,7 +186,7 @@ module.exports = async function listener({ api, event }) {
     process.exit(1);
   }
 
-  if (command) {
+  if (command && hasPrefix) {
     const { config } = command.manifest;
 
     const admins = global.Tokito.config.admins || [];
