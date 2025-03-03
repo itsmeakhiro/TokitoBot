@@ -34,8 +34,7 @@ module.exports = async function commandHandler({
 
     if (loweredBody === "prefix") {
       let response = fonts.monospace(
-        `▀█▀ █▀█ █▄▀ █ ▀█▀ █▀█
-         ░█░ █▄█ █░█ █ ░█░ █▄█`
+        `▀█▀ █▀█ █▄▀ █ ▀█▀ █▀█\n░█░ █▄█ █░█ █ ░█░ █▄█`
       );
 
       response += `\nSYSTEM PREFIX: ${mainPrefix}`;
