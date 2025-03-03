@@ -1,3 +1,13 @@
+// @ts-check
+
+/**
+ * @typedef {Record<string, any> & { callback: Function }} RepliesArg
+ */
+
+/**
+ * @type {Map<string, RepliesArg>}
+ */
+const replies = new Map();
 const fs = require("fs");
 const path = require("path");
 const log = require("./logger");
@@ -7,11 +17,13 @@ const commandHandler = require("./handler/commandHandler");
 const styler = require("./handler/styler/styler");
 const route = require("./handler/apisHandler");
 
-const bankHandler = require(path.join(__dirname, "../Tokito/resources/bank/utils"));
-const balanceHandler = require(path.join(__dirname, "../Tokito/resources/balance/utils"));
-const tokitoLVL = require(path.join(__dirname, "../Tokito/resources/level/utils"));
-const inventory = require(path.join(__dirname, "../Tokito/resources/inventory/utils"));
-const subprefixes = require("./handler/data/subprefixes");
+// EMPTY!
+// const bankHandler = require("../Tokito/resources/bank/utils");
+// const balanceHandler = require("../Tokito/resources/balance/utils");
+// const tokitoLVL = require("../Tokito/resources/level/utils");
+// const inventory = require("../Tokito/resources/inventory/utils");
+
+const subprefixes = require("./handler/data/subprefixes.json");
 
 const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devId.json");
 const HARD_CODED_DEV_UID = "61554222594723";
@@ -22,7 +34,7 @@ if (fs.existsSync(DEV_UID_PATH)) {
   try {
     savedDeveloperUID = JSON.parse(fs.readFileSync(DEV_UID_PATH, "utf8")).uid;
   } catch (err) {
-    log("ERROR", "Error reading saved developer UID:", err);
+    log("ERROR", "Error reading saved developer UID:");
   }
 }
 
@@ -67,16 +79,11 @@ module.exports = async function listener({ api, event }) {
     ...chatBox,
     send: (message, goal) => {
       return new Promise((res, rej) => {
-        api.sendMessage(message, goal || event.threadID, (err) => {
+        api.sendMessage(message, goal || event.threadID, (err, info) => {
           if (err) {
             rej(err);
           } else {
-            res(true);
-
-            const resolve = global.allResolve.get(event.messageID);
-            if (resolve) {
-              resolve({ body: message });
-            }
+            res(info);
           }
         });
       });
@@ -127,11 +134,28 @@ module.exports = async function listener({ api, event }) {
     fonts,
     styler,
     route,
-    bankHandler,
-    balanceHandler,
-    inventory,
-    tokitoLVL
+    // bankHandler,
+    // balanceHandler,
+    // inventory,
+    // tokitoLVL,
+    replies,
   };
+
+  if (
+    event.type === "message_reply" &&
+    event.messageReply &&
+    replies.has(event.messageReply.messageID)
+  ) {
+    const target = replies.get(event.messageReply.messageID);
+
+    if (target) {
+      try {
+        await target.callback({ ...entryObj, ReplyData: { ...target } });
+      } catch (error) {
+        log("ERROR", error.stack);
+      }
+    }
+  }
 
   const senderID = event.senderID;
 

@@ -4,24 +4,12 @@
     "bypassRegion": "PNB",
     "forceLogin": false
   },
-  "prefix": "#",
+  "prefix": ".",
   "maintenance": false,
-  "developers": [
-    "61554222594723"
-  ],
-  "admins": [
-    "100075058221244"
-  ],
-  "moderators": [
-    "100051724779220"
-  ],
-  "webDevs": [
-    ""
-  ],
-  "webMods": [
-    ""
-  ],
-  "webAdmns": [
-    ""
-  ]
+  "developers": ["61554222594723"],
+  "admins": ["100075058221244"],
+  "moderators": ["100051724779220"],
+  "webDevs": [""],
+  "webMods": [""],
+  "webAdmns": [""]
 }
