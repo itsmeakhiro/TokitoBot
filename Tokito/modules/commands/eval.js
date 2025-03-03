@@ -2,7 +2,7 @@ module.exports = {
     manifest: {
         name: "eval",
         aliases: ["evaluate", "exec"],
-        author: "Francis Loyd Raval",
+        developer: "Francis Loyd Raval",
         description: "Executes JavaScript code.",
         usage: "eval <code>",
         cooldown: 5,
