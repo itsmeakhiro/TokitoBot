@@ -91,6 +91,19 @@ class LevelSystem {
         return this.isRegistered(uid) ? this.levelData[uid].xp : null;
     }
 
+    getStats(uid) {
+    if (!this.isRegistered(uid)) return { error: "User not registered" };
+
+    const user = this.getUser(uid);
+    return {
+        username: user.username,
+        gameID: user.gameID,
+        xp: user.xp,
+        level: user.level,
+        rank: user.rank
+      };
+    }
+
     addXP(uid, amount) {
         if (!this.isRegistered(uid)) return { error: "User not registered" };
 
