@@ -1,5 +1,7 @@
 <h1>TOKITO</h1>
 
+<img align= "center" src= "https://i.imgur.com/aEIPsrq.gif"/>
+
 • Welcome to **TOKITO**BOT, a friendly and easy to use **AI FBChatbot** developed by [**Francis Loyd Raval**](https://www.facebook.com/callmefrancisloyd) himself with the help of some of the person(s), you just don't need any token or key to make this works. Just use your **FBState** or **Cookie Editor** and put it on the **cookies.json**, if theres any error kindly contact [**Francis Loyd Raval**](https://www.facebook.com/callmefrancisloyd) immediately.
 
 • **TOKITO**BOT is a friendly to use **FBBOT** botfile, I may not recommended it to modify this botfile because you don't know how many mistake I made that can casue me to seek help to my friend that also a developer, So PLEASE STOP MODIFYING THIS INSTEAD LEARN TO MAKE YOUR OWN!!
