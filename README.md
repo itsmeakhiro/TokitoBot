@@ -44,6 +44,7 @@ module.exports = {
      botAdmin: false,
      botModerator: false,
      noPrefix: false,
+     privateOnly: false,
     }
   },
   async deploy({ chat, fonts, args }){
