@@ -12,4 +12,10 @@
 git clone https://github.com/itsmeakhiro/Tokito-Bot; cp -r Tokito-Bot/. .; rm -rf Tokito-Bot
 ```
 
-<h1>HOW TO DEVELOPED A COMMAND?</h1>
+<h1>FEATURED CONTENTS</h1>
+
+✓ Has a styler function
+✓ Easy to create command file
+✓ Smooth bot response
+✓ Has a cooldown function
+✓ Has a ability to use the deployed bot link like an API
