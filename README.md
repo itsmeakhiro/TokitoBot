@@ -57,4 +57,4 @@ module.exports = {
 - Liane Cagara
 - Symer Steve Berondo
 
-> Developed Since: February 5, 2025
+> Developed Since: January 5, 2025
