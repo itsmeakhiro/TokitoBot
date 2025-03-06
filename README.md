@@ -21,4 +21,4 @@ git clone https://github.com/itsmeakhiro/Tokito-Bot; cp -r Tokito-Bot/. .; rm -r
 - Smooth bot response
 - Has a cooldown function
 - Has a ability to use the deployed bot link like an API
-- Has a Database System, just provide your **MonggoDB** url, click [here](`https://youtu.be/z1f9urHW5xY?si=SKMmw0RHrM9OWN5f`) to know how to make a Database on **MonggoDB**.
+- Has a Database System, just provide your **MonggoDB** url, click [here](https://youtu.be/z1f9urHW5xY?si=SKMmw0RHrM9OWN5f) to know how to make a Database on **MonggoDB**.
