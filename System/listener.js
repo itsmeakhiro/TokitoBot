@@ -140,7 +140,7 @@ module.exports = async function listener({ api, event }) {
     // bankHandler,
     // balanceHandler,
     // inventory,
-    levelSystem,
+    LevelSystem,
     replies,
   };
 
