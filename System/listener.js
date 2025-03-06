@@ -20,7 +20,7 @@ const route = require("./handler/apisHandler");
 // EMPTY!
 // const bankHandler = require("../Tokito/resources/bank/utils");
 // const balanceHandler = require("../Tokito/resources/balance/utils");
-const levelSystem = require("../Tokito/resources/level/utils");
+const LevelSystem = require("../Tokito/resources/level/utils");
 // const inventory = require("../Tokito/resources/inventory/utils");
 
 const subprefixes = require("./handler/data/subprefixes.json");
