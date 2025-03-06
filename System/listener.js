@@ -59,7 +59,6 @@ module.exports = async function listener({ api, event }) {
   const groupSubprefix = isGroup ? subprefixes[event.threadID] : null;
   const usedPrefix = groupSubprefix || prefix;
 
-  //if (!event.body.startsWith(usedPrefix)) return;
   let hasPrefix = event.body.startsWith(usedPrefix);
   let [commandName, ...args] = event.body.split(" ");
   commandName = commandName.toLowerCase();
@@ -186,8 +185,25 @@ module.exports = async function listener({ api, event }) {
     process.exit(1);
   }
 
-  if (command && hasPrefix) {
+  if (command) {
     const { config } = command.manifest;
+
+    const requiresPrefix = config?.noPrefix === true || config?.noPrefix === undefined;
+    const disallowsPrefix = config?.noPrefix === false;
+
+    if (requiresPrefix && !hasPrefix) {
+      await chat.send(
+        fonts.sans(`The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`)
+      );
+      return;
+    }
+
+    if (disallowsPrefix && hasPrefix) {
+      await chat.send(
+        fonts.sans(`The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`)
+      );
+      return;
+    }
 
     const admins = global.Tokito.config.admins || [];
     const moderators = global.Tokito.config.moderators || [];
