@@ -80,11 +80,6 @@ module.exports = async function listener({ api, event }) {
   const chat = {
     ...chatBox,
     send: (message, goal) => {
-      if (command && command.style && command.font) {
-        const { type, title, footer } = command.style;
-        message = await styler(type, title, message, footer, command.font);
-      }
-      
       return new Promise((res, rej) => {
         api.sendMessage(message, goal || event.threadID, (err, info) => {
           if (err) {
