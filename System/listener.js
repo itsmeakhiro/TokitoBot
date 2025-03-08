@@ -213,14 +213,14 @@ module.exports = async function listener({ api, event }) {
     const disallowsPrefix = config?.noPrefix === false;
 
     if (requiresPrefix && !hasPrefix) {
-      await chat.send(
+      await chat.reply(
         fonts.sans(`The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`)
       );
       return;
     }
 
     if (disallowsPrefix && hasPrefix) {
-      await chat.send(
+      await chat.reply(
         fonts.sans(`The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`)
       );
       return;
@@ -242,7 +242,7 @@ module.exports = async function listener({ api, event }) {
     const isModerator = hasPermission("moderator");
 
     if (config?.botAdmin && !isAdmin) {
-      await chat.send(
+      await chat.reply(
         fonts.sans(
           "Access denied, you don't have rights to use this admin-only command."
         )
@@ -251,7 +251,7 @@ module.exports = async function listener({ api, event }) {
     }
 
     if (config?.botModerator && !isModerator && !isAdmin) {
-      await chat.send(
+      await chat.reply(
         fonts.sans(
           "Access denied, you don't have rights to use this moderator-only command."
         )
