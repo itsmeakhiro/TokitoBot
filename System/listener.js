@@ -95,6 +95,22 @@ module.exports = async function listener({ api, event }) {
     });  
   });  
 },
+    reply: async (message, goal) => {
+  return new Promise((res, rej) => {  
+    api.sendMessage(
+      message, 
+      goal || event.threadID, 
+      (err, info) => {  
+        if (err) {  
+          rej(err);  
+        } else {  
+          res(info);  
+        }  
+      },
+      event.messageID
+    );  
+  });  
+},
     edit: (msg, mid) => {
       return new Promise((res, rej) => {
         api.editMessage(msg, mid, (err) => {
@@ -198,14 +214,14 @@ module.exports = async function listener({ api, event }) {
 
     if (requiresPrefix && !hasPrefix) {
       await chat.send(
-        fonts.sans(`The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`, null, true)
+        fonts.sans(`The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`)
       );
       return;
     }
 
     if (disallowsPrefix && hasPrefix) {
       await chat.send(
-        fonts.sans(`The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`, null, true)
+        fonts.sans(`The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`)
       );
       return;
     }
@@ -228,7 +244,7 @@ module.exports = async function listener({ api, event }) {
     if (config?.botAdmin && !isAdmin) {
       await chat.send(
         fonts.sans(
-          "Access denied, you don't have rights to use this admin-only command.", null, true
+          "Access denied, you don't have rights to use this admin-only command."
         )
       );
       return;
@@ -237,7 +253,7 @@ module.exports = async function listener({ api, event }) {
     if (config?.botModerator && !isModerator && !isAdmin) {
       await chat.send(
         fonts.sans(
-          "Access denied, you don't have rights to use this moderator-only command.", null, true
+          "Access denied, you don't have rights to use this moderator-only command."
         )
       );
       return;
