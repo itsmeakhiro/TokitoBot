@@ -80,16 +80,21 @@ module.exports = async function listener({ api, event }) {
   const chat = {
     ...chatBox,
     send: (message, goal) => {
-      return new Promise((res, rej) => {
-        api.sendMessage(message, goal || event.threadID, (err, info) => {
-          if (err) {
-            rej(err);
-          } else {
-            res(info);
-          }
-        });
-      });
-    },
+  return new Promise(async (res, rej) => {  
+    if (command && command.style && command.font) {
+      const { type, title, footer } = command.style;
+      message = await styler(type, title, message, footer, command.font);
+    }
+
+    api.sendMessage(message, goal || event.threadID, (err, info) => {  
+      if (err) {  
+        rej(err);  
+      } else {  
+        res(info);  
+      }  
+    });  
+  });  
+},
     edit: (msg, mid) => {
       return new Promise((res, rej) => {
         api.editMessage(msg, mid, (err) => {
