@@ -79,9 +79,9 @@ module.exports = async function listener({ api, event }) {
 
   const chat = {
     ...chatBox,
-    send: (message, goal) => {
+    send: (message, goal, noStyle = false) => {
   return new Promise(async (res, rej) => {  
-    if (command && command.style && command.font) {
+    if (!noStyle && command && command.style && command.font) {
       const { type, title, footer } = command.style;
       message = await styler(type, title, message, footer, command.font);
     }
@@ -198,14 +198,14 @@ module.exports = async function listener({ api, event }) {
 
     if (requiresPrefix && !hasPrefix) {
       await chat.send(
-        fonts.sans(`The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`)
+        fonts.sans(`The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`, null, true)
       );
       return;
     }
 
     if (disallowsPrefix && hasPrefix) {
       await chat.send(
-        fonts.sans(`The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`)
+        fonts.sans(`The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`, null, true)
       );
       return;
     }
@@ -228,7 +228,7 @@ module.exports = async function listener({ api, event }) {
     if (config?.botAdmin && !isAdmin) {
       await chat.send(
         fonts.sans(
-          "Access denied, you don't have rights to use this admin-only command."
+          "Access denied, you don't have rights to use this admin-only command.", null, true
         )
       );
       return;
@@ -237,7 +237,7 @@ module.exports = async function listener({ api, event }) {
     if (config?.botModerator && !isModerator && !isAdmin) {
       await chat.send(
         fonts.sans(
-          "Access denied, you don't have rights to use this moderator-only command."
+          "Access denied, you don't have rights to use this moderator-only command.", null, true
         )
       );
       return;
