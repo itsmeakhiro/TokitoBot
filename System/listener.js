@@ -17,11 +17,7 @@ const commandHandler = require("./handler/commandHandler");
 const styler = require("./handler/styler/styler");
 const route = require("./handler/apisHandler");
 
-// EMPTY!
-// const bankHandler = require("../Tokito/resources/bank/utils");
-// const balanceHandler = require("../Tokito/resources/balance/utils");
-const LevelSystem = require("../Tokito/resources/level/utils");
-// const inventory = require("../Tokito/resources/inventory/utils");
+const tokitoDB = require("../Tokito/resources/database/main");
 
 const subprefixes = require("./handler/data/subprefixes.json");
 
@@ -157,10 +153,7 @@ module.exports = async function listener({ api, event }) {
     fonts,
     styler,
     route,
-    // bankHandler,
-    // balanceHandler,
-    // inventory,
-    LevelSystem,
+    tokitoDB,
     replies,
   };
 
