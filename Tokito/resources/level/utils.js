@@ -1,97 +1,78 @@
-const fs = require("fs-extra");
+const fs = require("fs");
 const path = require("path");
 
-const LEVEL_DATA_PATH = path.join(__dirname, "levelData.json");
-
-const RANKS = {};
-for (let i = 1; i <= 200; i++) {
-    if (i <= 10) RANKS[i] = "New Recruit";
-    else if (i <= 20) RANKS[i] = "Trainee Slayer";
-    else if (i <= 30) RANKS[i] = "Kanoe (Upper Water)";
-    else if (i <= 40) RANKS[i] = "Kanoto (Upper Water II)";
-    else if (i <= 50) RANKS[i] = "Tsuchinoto (Earth’s Base)";
-    else if (i <= 60) RANKS[i] = "Tsuchinoe (Earth’s Branch)";
-    else if (i <= 70) RANKS[i] = "Hinoto (Flame’s Base)";
-    else if (i <= 80) RANKS[i] = "Hinoe (Flame’s Branch)";
-    else if (i <= 90) RANKS[i] = "Pillar Candidate";
-    else if (i <= 100) RANKS[i] = "Hashira (Pillar)";
-    else if (i <= 110) RANKS[i] = "Senior Hashira";
-    else if (i <= 120) RANKS[i] = "Elite Slayer";
-    else if (i <= 130) RANKS[i] = "Demon Slayer Champion";
-    else if (i <= 140) RANKS[i] = "Grandmaster Hashira";
-    else if (i <= 150) RANKS[i] = "Moonlit Slayer";
-    else if (i <= 160) RANKS[i] = "Eclipse Vanquisher";
-    else if (i <= 170) RANKS[i] = "Legendary Slayer";
-    else if (i <= 180) RANKS[i] = "Master of Demons";
-    else if (i <= 190) RANKS[i] = "Supreme Hashira";
-    else RANKS[i] = "LEGENDARY HASHIRA";
-}
+const DATA_PATH = path.join(__dirname, "levelData");
+const RANKS = [
+  { level: 1, rank: "New Recruit" },
+  { level: 5, rank: "Trainee Hashira" },
+  { level: 10, rank: "Mizunoto" },
+  { level: 15, rank: "Mizunoe" },
+  { level: 20, rank: "Kanoe" },
+  { level: 25, rank: "Kanoto" },
+  { level: 30, rank: "Tsuchinoto" },
+  { level: 35, rank: "Tsuchinoe" },
+  { level: 40, rank: "Hinoto" },
+  { level: 45, rank: "Hinoe" },
+  { level: 50, rank: "Kinoto" },
+  { level: 55, rank: "Kinoe" },
+  { level: 60, rank: "Junior Slayer" },
+  { level: 65, rank: "Elite Slayer" },
+  { level: 70, rank: "Demon Slayer Elite" },
+  { level: 75, rank: "Pillar (Hashira)" },
+  { level: 80, rank: "Legendary Hashira" },
+  { level: 85, rank: "Supreme Hashira" },
+  { level: 90, rank: "Demon Slayer Master" },
+  { level: 95, rank: "Ultimate Hashira" },
+  { level: 100, rank: "Infinity Hashira" }
+];
 
 class LevelSystem {
-    constructor(uid, username = "Unknown") {
-        this.uid = uid;
-        this.username = username;
-        this.loadData();
-    }
+  constructor(uid) {
+    this.uid = uid;
+    this.filePath = path.join(DATA_PATH, `${uid}.json`);
+    this.data = this.loadData();
+  }
 
-    loadData() {
-        if (fs.existsSync(LEVEL_DATA_PATH)) {
-            try {
-                const data = JSON.parse(fs.readFileSync(LEVEL_DATA_PATH, "utf8"));
-                if (data[this.uid]) {
-                    this.xp = data[this.uid].xp;
-                    this.level = data[this.uid].level;
-                    this.rank = data[this.uid].rank;
-                    return;
-                }
-            } catch (err) {
-                console.error("Error loading level data:", err);
-            }
-        }
-        this.xp = 0;
-        this.level = 1;
-        this.rank = RANKS[1];
-        this.saveData();
-    }
+  loadData() {
+    if (!fs.existsSync(this.filePath)) return { xp: 0, username: "" };
+    return JSON.parse(fs.readFileSync(this.filePath, "utf-8"));
+  }
 
-    saveData() {
-        let data = {};
-        if (fs.existsSync(LEVEL_DATA_PATH)) {
-            try {
-                data = JSON.parse(fs.readFileSync(LEVEL_DATA_PATH, "utf8"));
-            } catch (err) {
-                console.error("Error reading level data:", err);
-            }
-        }
-        data[this.uid] = { xp: this.xp, level: this.level, rank: this.rank, username: this.username };
-        fs.writeFileSync(LEVEL_DATA_PATH, JSON.stringify(data, null, 2));
-    }
+  saveData() {
+    if (!fs.existsSync(DATA_PATH)) fs.mkdirSync(DATA_PATH, { recursive: true });
+    fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2));
+  }
 
-    addXP(amount) {
-        this.xp += amount;
-        const xpNeeded = Math.floor(100 * Math.pow(1.2, this.level));
-        let leveledUp = false;
+  getXP() {
+    return this.data.xp;
+  }
 
-        while (this.xp >= xpNeeded && this.level < 200) {
-            this.xp -= xpNeeded;
-            this.level += 1;
-            leveledUp = true;
-        }
+  addXP(exp) {
+    this.data.xp += exp;
+    this.saveData();
+  }
 
-        this.rank = RANKS[this.level];
-        this.saveData();
-        return { leveledUp, newLevel: this.level, newRank: this.rank };
-    }
+  setXP(xp) {
+    this.data.xp = Math.max(0, xp); 
+    this.saveData();
+  }
 
-    getLevel() {
-        return this.level;
-    }
+  getLevel() {
+    return Math.floor(0.1 * Math.sqrt(this.getXP()));
+  }
 
-    getRank() {
-        return this.rank;
-    }
+  getRank() {
+    let level = this.getLevel();
+    let rank = RANKS.findLast((r) => level >= r.level);
+    return rank ? rank.rank : RANKS[RANKS.length - 1].rank;
+  }
 
-    getXP() {
-        return this.xp;
-    }
+  setUsername(username) {
+    this.data.username = username;
+    this.saveData();
+  }
+
+  getUsername() {
+    return this.data.username || "Unknown";
+  }
 }
