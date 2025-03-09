@@ -19,7 +19,9 @@ const commandHandler = require("./handler/commandHandler");
 const styler = require("./handler/styler/styler");
 const route = require("./handler/apisHandler");
 
-const tokitoDB = require("../Tokito/resources/database/main");
+const TokitoDB = require("../Tokito/resources/database/main");
+const tokitoDB = new TokitoDB();
+
 
 const subprefixes = require("./handler/data/subprefixes.json");
 
@@ -48,6 +50,7 @@ if (!savedDeveloperUID) {
 }
 
 module.exports = async function listener({ api, event }) {
+  await tokitoDB.connect();
   const { prefix, developers } = global.Tokito;
 
   if (!event.body) return;
@@ -67,7 +70,7 @@ module.exports = async function listener({ api, event }) {
   const command = global.Tokito.commands.get(commandName);
 
   const chatBox = {
-    react: (emoji) => api.setMessageReaction(emoji, event.messageID, () => {}),
+    react: (emoji) => api.setMessageReaction(emoji, event.messageID, () => { }),
     send: (message, id) =>
       api.sendMessage(message, id || event.threadID, event.messageID),
     addParticipant: (uid) => api.addUserToGroup(uid, event.threadID),
@@ -78,37 +81,37 @@ module.exports = async function listener({ api, event }) {
   const chat = {
     ...chatBox,
     send: (message, goal, noStyle = false) => {
-  return new Promise(async (res, rej) => {  
-    if (!noStyle && command && command.style && command.font) {
-      const { type, title, footer } = command.style;
-      message = await styler(type, title, message, footer, command.font);
-    }
+      return new Promise(async (res, rej) => {
+        if (!noStyle && command && command.style && command.font) {
+          const { type, title, footer } = command.style;
+          message = await styler(type, title, message, footer, command.font);
+        }
 
-    api.sendMessage(message, goal || event.threadID, (err, info) => {  
-      if (err) {  
-        rej(err);  
-      } else {  
-        res(info);  
-      }  
-    });  
-  });  
-},
+        api.sendMessage(message, goal || event.threadID, (err, info) => {
+          if (err) {
+            rej(err);
+          } else {
+            res(info);
+          }
+        });
+      });
+    },
     reply: async (message, goal) => {
-  return new Promise((res, rej) => {  
-    api.sendMessage(
-      message, 
-      goal || event.threadID, 
-      (err, info) => {  
-        if (err) {  
-          rej(err);  
-        } else {  
-          res(info);  
-        }  
-      },
-      event.messageID
-    );  
-  });  
-},
+      return new Promise((res, rej) => {
+        api.sendMessage(
+          message,
+          goal || event.threadID,
+          (err, info) => {
+            if (err) {
+              rej(err);
+            } else {
+              res(info);
+            }
+          },
+          event.messageID
+        );
+      });
+    },
     edit: (msg, mid) => {
       return new Promise((res, rej) => {
         api.editMessage(msg, mid, (err) => {
