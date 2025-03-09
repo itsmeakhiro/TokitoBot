@@ -7,6 +7,8 @@
 /**
  * @type {Map<string, RepliesArg>}
  */
+
+const tokitoDB = new UserStatsManager();
 const replies = new Map();
 const fs = require("fs");
 const path = require("path");
