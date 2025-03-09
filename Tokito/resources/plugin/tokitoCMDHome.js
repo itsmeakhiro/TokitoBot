@@ -4,7 +4,7 @@
   Proceed with caution and adhere to Tokito's guidelines.
 */
 
-import { TokitoSymbols } from "./tokitoSymbols.js";
+import { TokitoSymbols } from "./unisys.js";
 
 /**
  * @typedef {{ key: string; handler: Function, description: string | null, args: string[] | null, aliases: string[] | null }} Config
