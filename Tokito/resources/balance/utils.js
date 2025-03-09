@@ -1,43 +1,37 @@
 const WEALTH_RANKS = [
-  { amount: 0, rank: "Broke" },
-  { amount: 500, rank: "Beginner Saver" },
-  { amount: 1000, rank: "Average Earner" },
-  { amount: 5000, rank: "Wealthy Citizen" },
-  { amount: 10000, rank: "Elite Investor" },
-  { amount: 50000, rank: "Millionaire" },
-  { amount: 100000, rank: "Billionaire" }
+  { amount: 0, rank: "Low Income" },
+  { amount: 1000, rank: "Middle Class" },
+  { amount: 10000, rank: "Upper Middle Class" },
+  { amount: 100000, rank: "Affluent" },
+  { amount: 500000, rank: "Wealthy" },
+  { amount: 1000000, rank: "Millionaire" },
+  { amount: 5000000, rank: "Multi-Millionaire" },
+  { amount: 50000000, rank: "Billionaire" },
+  { amount: 1000000000, rank: "Multi-Billionaire" }
 ];
 
 class BalanceHandler {
   constructor(data) {
     this.data = data ?? {};
-    this.data.balance = typeof this.data.balance === "number" ? this.data.balance : null;
-  }
-
-  isRegistered() {
-    return typeof this.data.balance === "number";
+    this.data.balance = typeof this.data.balance === "number" ? this.data.balance : 0;
   }
 
   getBalance() {
-    if (!this.isRegistered()) throw new Error("User not registered.");
     return this.data.balance;
   }
 
   addBalance(amount) {
-    if (!this.isRegistered()) throw new Error("User not registered.");
     if (typeof amount !== "number" || amount <= 0) throw new Error("Invalid amount.");
     this.data.balance += amount;
   }
 
   deductBalance(amount) {
-    if (!this.isRegistered()) throw new Error("User not registered.");
     if (typeof amount !== "number" || amount <= 0) throw new Error("Invalid amount.");
     if (this.data.balance < amount) throw new Error("Insufficient balance.");
     this.data.balance -= amount;
   }
 
   getWealthRank() {
-    if (!this.isRegistered()) throw new Error("User not registered.");
     let rank = WEALTH_RANKS.findLast((r) => this.data.balance >= r.amount);
     return rank ? rank.rank : WEALTH_RANKS[0].rank;
   }
@@ -45,4 +39,4 @@ class BalanceHandler {
   export() {
     return { balance: this.data.balance };
   }
-      }
+}
