@@ -1,13 +1,26 @@
 const WEALTH_RANKS = [
   { amount: 0, rank: "Low Income" },
-  { amount: 1000, rank: "Middle Class" },
-  { amount: 10000, rank: "Upper Middle Class" },
-  { amount: 100000, rank: "Affluent" },
-  { amount: 500000, rank: "Wealthy" },
-  { amount: 1000000, rank: "Millionaire" },
-  { amount: 5000000, rank: "Multi-Millionaire" },
-  { amount: 50000000, rank: "Billionaire" },
-  { amount: 1000000000, rank: "Multi-Billionaire" }
+  { amount: 10_000, rank: "Middle Class" },
+  { amount: 100_000, rank: "Upper Middle Class" },
+  { amount: 500_000, rank: "Mass Affluent" },
+  { amount: 1_000_000, rank: "Millionaire" },
+  { amount: 5_000_000, rank: "Multi-Millionaire" },
+  { amount: 10_000_000, rank: "High Net Worth Individual (HNWI)" },
+  { amount: 50_000_000, rank: "Ultra High Net Worth Individual (UHNWI)" },
+  { amount: 100_000_000, rank: "Centimillionaire" },
+  { amount: 500_000_000, rank: "Demi-Billionaire" },
+  { amount: 1_000_000_000, rank: "Billionaire" },
+  { amount: 5_000_000_000, rank: "Multi-Billionaire" },
+  { amount: 10_000_000_000, rank: "Tycoon" },
+  { amount: 50_000_000_000, rank: "Industrial Magnate" },
+  { amount: 100_000_000_000, rank: "Trillionaire" },
+  { amount: 500_000_000_000, rank: "Multi-Trillionaire" },
+  { amount: 1_000_000_000_000, rank: "Financial Emperor" },
+  { amount: 5_000_000_000_000, rank: "Supreme Wealth Authority" },
+  { amount: 10_000_000_000_000, rank: "Global Economic Minister" },
+  { amount: 50_000_000_000_000, rank: "Minister of Finance" },
+  { amount: 100_000_000_000_000, rank: "High Council of Wealth" },
+  { amount: 1_000_000_000_000_000, rank: "Royal Minister of Treasury" }
 ];
 
 class BalanceHandler {
