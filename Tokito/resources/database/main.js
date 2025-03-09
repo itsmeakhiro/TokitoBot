@@ -1,3 +1,5 @@
+// Disclaimer: This code is related to CassidyRedux(https://github.com/lianecagara/CassidyRedux) developed by: Liane Cagara, do not intend to change this code
+
 const LiaMongo = require("lia-mongo");
 
 class UserStatsManager {
