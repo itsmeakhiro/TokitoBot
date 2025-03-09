@@ -1,7 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-
-const DATA_PATH = path.join(__dirname, "levelData");
 const RANKS = [
   { level: 1, rank: "New Recruit" },
   { level: 5, rank: "Trainee Hashira" },
@@ -27,20 +23,8 @@ const RANKS = [
 ];
 
 class LevelSystem {
-  constructor(uid) {
-    this.uid = uid;
-    this.filePath = path.join(DATA_PATH, `${uid}.json`);
-    this.data = this.loadData();
-  }
-
-  loadData() {
-    if (!fs.existsSync(this.filePath)) return { xp: 0, username: "" };
-    return JSON.parse(fs.readFileSync(this.filePath, "utf-8"));
-  }
-
-  saveData() {
-    if (!fs.existsSync(DATA_PATH)) fs.mkdirSync(DATA_PATH, { recursive: true });
-    fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2));
+  constructor(data) {
+    this.data = data ?? {};
   }
 
   getXP() {
@@ -49,12 +33,10 @@ class LevelSystem {
 
   addXP(exp) {
     this.data.xp += exp;
-    this.saveData();
   }
 
   setXP(xp) {
     this.data.xp = Math.max(0, xp); 
-    this.saveData();
   }
 
   getLevel() {
@@ -69,10 +51,13 @@ class LevelSystem {
 
   setUsername(username) {
     this.data.username = username;
-    this.saveData();
   }
 
   getUsername() {
     return this.data.username || "Unknown";
+  }
+
+  export() {
+    return JSON.parse(JSON.stringify(this.data));
   }
 }
