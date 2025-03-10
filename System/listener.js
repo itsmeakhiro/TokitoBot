@@ -19,8 +19,8 @@ const commandHandler = require("./handler/commandHandler");
 const styler = require("./handler/styler/styler");
 const route = require("./handler/apisHandler");
 
-const TDB = require("../Tokito/resources/database/main");
-const tokitoDB = new TDB();
+const TokitoDB = require("../Tokito/resources/database/main");
+const tDB = new TokitoDB();
 
 
 const subprefixes = require("./handler/data/subprefixes.json");
@@ -158,7 +158,7 @@ module.exports = async function listener({ api, event }) {
     fonts,
     styler,
     route,
-    tokitoDB,
+    tDB,
     replies,
   };
 
