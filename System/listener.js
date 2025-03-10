@@ -19,8 +19,8 @@ const commandHandler = require("./handler/commandHandler");
 const styler = require("./handler/styler/styler");
 const route = require("./handler/apisHandler");
 
-const TokitoDB = require("../Tokito/resources/database/main");
-const tokitoDB = new TokitoDB();
+const TDB = require("../Tokito/resources/database/main");
+const tokitoDB = new TDB();
 
 
 const subprefixes = require("./handler/data/subprefixes.json");
