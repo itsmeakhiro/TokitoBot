@@ -20,7 +20,7 @@ const styler = require("./handler/styler/styler");
 const route = require("./handler/apisHandler");
 
 const TokitoDB = require("../Tokito/resources/database/main");
-const tDB = new TokitoDB();
+const tokitoDB = new TokitoDB();
 
 
 const subprefixes = require("./handler/data/subprefixes.json");
@@ -158,7 +158,7 @@ module.exports = async function listener({ api, event }) {
     fonts,
     styler,
     route,
-    tDB,
+    tokitoDB,
     replies,
   };
 
