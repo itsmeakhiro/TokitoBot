@@ -4,7 +4,7 @@ const LiaMongo = require("lia-mongo");
 
 class UserStatsManager {
     #uri;
-    constructor({ uri = process.env.TDBkey } = {}) {
+    constructor({ uri = process.env.MONGO_URI } = {}) {
         this.defaults = {
             balance: 0,
             username: null,
