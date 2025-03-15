@@ -8,6 +8,7 @@
  * @type {Map<string, RepliesArg>}
  */
 
+let isConnected = false;
 const replies = new Map();
 const fs = require("fs");
 const path = require("path");
@@ -49,7 +50,10 @@ if (!savedDeveloperUID) {
 }
 
 module.exports = async function listener({ api, event }) {
-  await tokitoDB.connect();
+  if (!isConnected) {
+    isConnected = true;
+    await tokitoDB.connect();
+  }
   const { prefix, developers } = global.Tokito;
 
   if (!event.body) return;
