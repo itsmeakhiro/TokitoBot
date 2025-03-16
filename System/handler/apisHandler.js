@@ -1,6 +1,9 @@
 const axios = require("axios").default;
 
-module.exports = {
+/**
+ * @type {Tokito.Route}
+ */
+const routes = {
   async chatbotMarin(message) {
     try {
       const data = JSON.stringify({
@@ -49,3 +52,4 @@ module.exports = {
     }
   },
 };
+module.exports = routes;

@@ -1,5 +1,6 @@
 module.exports = async function eventHandler({ ...entryObj }) {
   const { event, chat, fonts, api } = entryObj;
+  // WARNING THIS IS UNUSED AND EVERYTHING IS IN LISTENER
 
   try {
     if (!event) {

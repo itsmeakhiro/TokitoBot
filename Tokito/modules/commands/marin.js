@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {TokitoLia.Command}
+ */
+const command = {
   manifest: {
     name: "marin",
     aliases: ["mar"],
@@ -20,8 +23,8 @@ module.exports = {
       const userMessage = args.join(" ");
       const response = await route.chatbotMarin(userMessage);
 
-      if (response && response.responses && response.responses.length > 0) {
-        chat.send(response.responses[0].response);
+      if (response && response.length > 0) {
+        chat.send(response);
       } else {
         chat.send(fonts.monospace("No Response"));
       }
@@ -34,3 +37,4 @@ module.exports = {
     }
   },
 };
+module.exports = command;

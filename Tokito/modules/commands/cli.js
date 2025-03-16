@@ -1,7 +1,10 @@
 const axios = require("axios").default;
 const util = require("util");
 
-module.exports = {
+/**
+ * @type {TokitoLia.Command}
+ */
+const command = {
   manifest: {
     name: "cli",
     aliases: ["test"],
@@ -40,8 +43,7 @@ module.exports = {
       
 ℹ️ This is meant for educational or for API testing only. Use it at your own risk.`);
     }
-
-    const command = args.shift().toLowerCase();
+    const command = args.shift()?.toLowerCase();
     const input = args.join(" ");
 
     switch (command) {
@@ -92,3 +94,5 @@ module.exports = {
     }
   },
 };
+
+module.exports = command;

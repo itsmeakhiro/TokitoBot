@@ -10,7 +10,10 @@ const formatSearchResults = (results, fonts) => {
   }));
 };
 
-module.exports = {
+/**
+ * @type {Tokito.Command}
+ */
+const command = {
   manifest: {
     name: "ai",
     aliases: ["chatgpt", "gpt"],
@@ -68,3 +71,5 @@ module.exports = {
     }
   },
 };
+
+module.exports = command;

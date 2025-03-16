@@ -14,7 +14,7 @@ function getSubprefix(threadID) {
     return null;
   }
 }
-
+// WARNING THIS IS UNUSED AND EVERYTHING IS IN LISTENER
 module.exports = async function commandHandler({
   api,
   chat,

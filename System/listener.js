@@ -17,8 +17,8 @@ const path = require("path");
 const log = require("./logger");
 const fonts = require("./handler/styler/createFonts");
 const TokitoHM = require("./handler/styler/tokitoHM");
-const eventHandler = require("./handler/eventHandler");
-const commandHandler = require("./handler/commandHandler");
+const eventHandler = require("./handler/eventHandler"); // unused shits
+const commandHandler = require("./handler/commandHandler"); // unused shits
 const styler = require("./handler/styler/styler");
 const route = require("./handler/apisHandler");
 
@@ -26,7 +26,9 @@ const TokitoDB = require("../Tokito/resources/database/main");
 const tokitoDB = new TokitoDB();
 
 const subprefixes = require("./handler/data/subprefixes.json");
-
+const LevelSystem = require("../Tokito/resources/level/utils");
+const BalanceHandler = require("../Tokito/resources/balance/utils");
+const Inventory = require("../Tokito/resources/inventory/utils");
 const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devId.json");
 const HARD_CODED_DEV_UID = "61554222594723";
 
@@ -119,6 +121,9 @@ module.exports = async function listener({ api, event }) {
     tokitoDB,
     TokitoHM,
     replies,
+    LevelSystem,
+    BalanceHandler,
+    Inventory,
   };
 
   global.bot.emit("message", entryObj);

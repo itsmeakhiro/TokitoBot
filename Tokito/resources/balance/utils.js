@@ -24,6 +24,7 @@ const WEALTH_RANKS = [
 ];
 
 class BalanceHandler {
+  static WEALTH_RANKS = WEALTH_RANKS;
   constructor(data) {
     this.data = data ?? {};
     this.data.balance =

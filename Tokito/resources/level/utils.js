@@ -23,6 +23,7 @@ const RANKS = [
 ];
 
 class LevelSystem {
+  static RANKS = RANKS;
   constructor(data) {
     this.data = data ?? {};
   }

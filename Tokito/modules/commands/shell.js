@@ -1,6 +1,9 @@
 const { exec } = require("child_process");
 
-module.exports = {
+/**
+ * @type {TokitoLia.Command}
+ */
+const command = {
     manifest: {
         name: "shell",
         aliases: ["sh", "terminal", "cmd"],
@@ -42,3 +45,4 @@ module.exports = {
         });
     }
 };
+module.exports = command;

@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {TokitoLia.Command}
+ */
+const command = {
   manifest: {
     name: "eval",
     aliases: ["evaluate", "exec"],
@@ -39,3 +42,4 @@ module.exports = {
     }
   },
 };
+module.exports = command;
