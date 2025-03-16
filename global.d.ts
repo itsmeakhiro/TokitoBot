@@ -42,7 +42,7 @@ declare namespace TokitoLia {
     fonts: Fonts;
     styler: Styler;
     route: Route;
-    tokitoDB: typeof import("./Tokito/resources/database/main");
+    tokitoDB: import("./Tokito/resources/database/main");
     TokitoHM: typeof import("./System/handler/styler/tokitoHM");
     replies: Map<string, RepliesArg>;
     LevelSystem: typeof import("./Tokito/resources/level/utils");
@@ -72,7 +72,9 @@ declare namespace TokitoLia {
   }
 
   export interface RepliesArg {
-    callback: (entryObj: EntryObj) => void;
+    callback: (
+      entryObj: EntryObj & { ReplyData: TokitoLia.RepliesArg }
+    ) => void;
     [key: string]: any;
   }
 
@@ -99,6 +101,7 @@ declare namespace TokitoLia {
       webDevs: string[];
       webMods: string[];
       webAdmns: string[];
+      antitheft: unknown;
     };
     commands: Map<string, Command>;
     events: Map<string, any>;
@@ -107,7 +110,7 @@ declare namespace TokitoLia {
   }
 }
 
-declare global {
+declare namespace globalThis {
   var bot: import("events").EventEmitter;
   var Tokito: TokitoLia.GlobalTokito;
 }

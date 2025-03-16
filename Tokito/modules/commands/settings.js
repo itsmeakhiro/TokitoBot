@@ -96,7 +96,7 @@ const command = {
             "utf8"
           );
 
-          global.Tokito.config.prefix = newPrefix;
+          global.Tokito.config.prefix = String(newPrefix);
           chat.send(
             fonts.monospace(
               `Prefix changed to '${global.Tokito.config.prefix}'.`

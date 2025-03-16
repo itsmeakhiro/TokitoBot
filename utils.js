@@ -9,13 +9,17 @@ function log(type, message) {
     ERROR: "\x1b[31m",
     RESET: "\x1b[0m",
   };
-  console.log(`${colors[type] || colors.SYSTEM}[ ${type} ]${colors.RESET} ${message}`);
+  console.log(
+    `${colors[type] || colors.SYSTEM}[ ${type} ]${colors.RESET} ${message}`
+  );
 }
 
 module.exports = {
   async loadCommands() {
     const filePath = path.resolve(process.cwd(), "./Tokito/modules/commands");
-    const loadfiles = fs.readdirSync(filePath).filter((file) => file.endsWith(".js"));
+    const loadfiles = fs
+      .readdirSync(filePath)
+      .filter((file) => file.endsWith(".js"));
 
     if (loadfiles.length === 0) {
       log("ERROR", "No commands available to deploy");
@@ -24,6 +28,9 @@ module.exports = {
 
     for (const file of loadfiles) {
       const commandPath = path.join(filePath, file);
+      /**
+       * @type {TokitoLia.Command}
+       */
       const command = require(commandPath);
       const { manifest, deploy } = command ?? {};
 
@@ -37,8 +44,14 @@ module.exports = {
         continue;
       }
 
-      if (manifest.config?.botAdmin === undefined || manifest.config?.botModerator === undefined) {
-        log("ERROR", `Missing botAdmin or botModerator config for the command: ${file}`);
+      if (
+        manifest.config?.botAdmin === undefined ||
+        manifest.config?.botModerator === undefined
+      ) {
+        log(
+          "ERROR",
+          `Missing botAdmin or botModerator config for the command: ${file}`
+        );
         continue;
       }
 
@@ -50,7 +63,10 @@ module.exports = {
           if (Array.isArray(manifest.aliases)) {
             for (const alias of manifest.aliases) {
               global.Tokito.commands.set(alias, command);
-              log("COMMAND", `Alias "${alias}" registered for command "${manifest.name}"`);
+              log(
+                "COMMAND",
+                `Alias "${alias}" registered for command "${manifest.name}"`
+              );
             }
           }
         } else {
@@ -64,7 +80,9 @@ module.exports = {
 
   async loadEvents() {
     const filePath = path.resolve(process.cwd(), "./Tokito/modules/events");
-    const loadfiles = fs.readdirSync(filePath).filter((file) => file.endsWith(".js"));
+    const loadfiles = fs
+      .readdirSync(filePath)
+      .filter((file) => file.endsWith(".js"));
 
     if (loadfiles.length === 0) {
       log("ERROR", "No events available to deploy");
@@ -97,5 +115,5 @@ module.exports = {
         log("ERROR", `Failed to deploy ${file}: ${error.stack}`);
       }
     }
-  }
+  },
 };

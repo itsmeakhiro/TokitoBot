@@ -1,13 +1,9 @@
 // @ts-check
 
-/**
- * @typedef {Record<string, any> & { callback: Function }} RepliesArg
- */
-
 let isConnected = false;
 
 /**
- * @type {Map<string, RepliesArg>}
+ * @type {Map<string, TokitoLia.RepliesArg>}
  */
 
 const replies = new Map();
@@ -58,7 +54,7 @@ module.exports = async function listener({ api, event }) {
     isConnected = true;
     await tokitoDB.connect();
   }
-  const { prefix, developers } = global.Tokito;
+  const { prefix, developers } = global.Tokito.config;
 
   if (!event.body) return;
 
@@ -110,6 +106,9 @@ module.exports = async function listener({ api, event }) {
     },
   };
 
+  /**
+   * @type {TokitoLia.CommandContext}
+   */
   const entryObj = {
     api,
     chat,

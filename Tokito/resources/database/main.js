@@ -2,7 +2,6 @@
 
 const LiaMongo = require("lia-mongo");
 
-
 class UserStatsManager {
   /**
    * @type {string | undefined}
@@ -14,7 +13,7 @@ class UserStatsManager {
       username: null,
     };
     this.mongo = null;
-    this.#uri = uri;
+    this.#uri = uri ?? process.env.MONGO_URI;
     if (!this.#uri) {
       throw new Error("Missing MongoDB URI");
     }
