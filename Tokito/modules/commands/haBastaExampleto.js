@@ -20,11 +20,11 @@ module.exports = {
     name: "example",
     description: "Example command using tokitoHM",
     usage: ["example info", "example help"],
-  },
-  config: {
+    config: {
     noPrefix: false,
     botAdmin: false,
     botModerator: false,
+    }
   },
   async deploy(ctx) {
     const home = new ctx.tokitoHM(commands, "◆");
