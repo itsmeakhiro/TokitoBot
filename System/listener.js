@@ -14,7 +14,7 @@ const fs = require("fs");
 const path = require("path");
 const log = require("./logger");
 const fonts = require("./handler/styler/createFonts");
-const tokitoHM = require("./handler/styler/tokitoHM");
+const TokitoHM = require("./handler/styler/tokitoHM");
 const eventHandler = require("./handler/eventHandler");
 const commandHandler = require("./handler/commandHandler");
 const styler = require("./handler/styler/styler");
@@ -163,7 +163,7 @@ module.exports = async function listener({ api, event }) {
     styler,
     route,
     tokitoDB,
-    tokitoHM,
+    TokitoHM,
     replies,
   };
 
