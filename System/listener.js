@@ -23,7 +23,6 @@ const route = require("./handler/apisHandler");
 const TokitoDB = require("../Tokito/resources/database/main");
 const tokitoDB = new TokitoDB();
 
-
 const subprefixes = require("./handler/data/subprefixes.json");
 
 const DEV_UID_PATH = path.join(__dirname, "handler", "data", "devId.json");
@@ -74,7 +73,7 @@ module.exports = async function listener({ api, event }) {
   const command = global.Tokito.commands.get(commandName);
 
   const chatBox = {
-    react: (emoji) => api.setMessageReaction(emoji, event.messageID, () => { }),
+    react: (emoji) => api.setMessageReaction(emoji, event.messageID, () => {}),
     send: (message, id) =>
       api.sendMessage(message, id || event.threadID, event.messageID),
     addParticipant: (uid) => api.addUserToGroup(uid, event.threadID),
@@ -167,6 +166,8 @@ module.exports = async function listener({ api, event }) {
     replies,
   };
 
+  global.bot.emit("message", entryObj);
+
   if (
     event.type === "message_reply" &&
     event.messageReply &&
@@ -246,18 +247,14 @@ module.exports = async function listener({ api, event }) {
 
     if (config?.botAdmin && !isAdmin) {
       await chat.reply(
-        fonts.sans(
-          "Access denied, you don't have rights to use this admin-only command."
-        )
+        fonts.sans("Access denied, you don't have rights to use this admin-only command.")
       );
       return;
     }
 
     if (config?.botModerator && !isModerator && !isAdmin) {
       await chat.reply(
-        fonts.sans(
-          "Access denied, you don't have rights to use this moderator-only command."
-        )
+        fonts.sans("Access denied, you don't have rights to use this moderator-only command.")
       );
       return;
     }
@@ -271,18 +268,4 @@ module.exports = async function listener({ api, event }) {
   }
 
   console.log(`Unknown command: ${commandName}`);
-
-  switch (event.type) {
-    case "message":
-      commandHandler({ ...entryObj });
-      break;
-    case "event":
-      eventHandler({ ...entryObj });
-      break;
-    case "message_reply":
-      commandHandler({ ...entryObj });
-      break;
-    default:
-      console.log(`Unhandled event type: ${event.type}`);
-  }
 };
