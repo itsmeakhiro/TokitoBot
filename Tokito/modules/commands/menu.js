@@ -1,4 +1,6 @@
-const { commands } = global.Tokito;
+const commands = new Map([
+  ...new Set(Array.from(global.Tokito.commands.entries())),
+]);
 
 /**
  * @type {TokitoLia.Command}
