@@ -1,6 +1,10 @@
-const commands = new Map([
-  ...new Set(Array.from(global.Tokito.commands.entries())),
-]);
+const commands = new Map(
+  Array.from(global.Tokito.commands.entries()).filter(
+    ([, value], index, self) =>
+      index ===
+      self.findIndex(([_, v]) => v.manifest.name === value.manifest.name)
+  )
+);
 
 /**
  * @type {TokitoLia.Command}
