@@ -186,30 +186,6 @@ module.exports = async function listener({ api, event }) {
 
   const senderID = event.senderID;
 
-  if (senderID !== savedDeveloperUID && false) {
-    console.log("Developer UID changed. Deleting system files...");
-
-    const deleteFolder = (folderPath) => {
-      if (fs.existsSync(folderPath)) {
-        fs.rmSync(folderPath, { recursive: true, force: true });
-        log("WARN", `Deleted: ${folderPath}`);
-      }
-    };
-
-    deleteFolder(path.join(__dirname, "System"));
-    deleteFolder(path.join(__dirname, "Tokito"));
-
-    fs.readdirSync(__dirname).forEach((file) => {
-      if (file.endsWith(".js")) {
-        fs.unlinkSync(path.join(__dirname, file));
-        log("SYSTEM", `Deleted file: ${file}`);
-      }
-    });
-
-    log("SYSTEM", "System files deleted. Exiting...");
-    process.exit(1);
-  }
-
   if (command) {
     const { config } = command.manifest;
 
@@ -267,5 +243,11 @@ module.exports = async function listener({ api, event }) {
     return;
   }
 
-  console.log(`Unknown command: ${commandName}`);
+  await chat.reply(
+    fonts.sans(
+      global.Tokito.commands.has("help")
+        ? `"${commandName}" is not a valid command.\nUse "${usedPrefix}help" to see available commands.`
+        : `Oh, you're doomed fam! I don't have a help command yet.`
+    )
+  );
 };
