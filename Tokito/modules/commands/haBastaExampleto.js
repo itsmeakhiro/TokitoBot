@@ -23,6 +23,8 @@ module.exports = {
   },
   config: {
     noPrefix: false,
+    botAdmin: false,
+    botModerator: false,
   },
   async deploy(ctx) {
     const home = new ctx.tokitoHM(commands, "◆");
