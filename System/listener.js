@@ -57,7 +57,6 @@ module.exports = async function listener({ api, event }) {
   const { prefix, developers } = global.Tokito;
 
   if (!event.body) return;
-  console.log(event);
 
   const isGroup = event.threadID !== event.senderID;
   const groupSubprefix = isGroup ? subprefixes[event.threadID] : null;
@@ -72,17 +71,7 @@ module.exports = async function listener({ api, event }) {
 
   const command = global.Tokito.commands.get(commandName);
 
-  const chatBox = {
-    react: (emoji) => api.setMessageReaction(emoji, event.messageID, () => {}),
-    send: (message, id) =>
-      api.sendMessage(message, id || event.threadID, event.messageID),
-    addParticipant: (uid) => api.addUserToGroup(uid, event.threadID),
-    removeParticipant: (uid) => api.removeUserFromGroup(uid, event.threadID),
-    threadInfo: async () => await api.getThreadInfo(event.threadID),
-  };
-
   const chat = {
-    ...chatBox,
     send: (message, goal, noStyle = false) => {
       return new Promise(async (res, rej) => {
         if (!noStyle && command && command.style && command.font) {
@@ -112,42 +101,6 @@ module.exports = async function listener({ api, event }) {
             }
           },
           event.messageID
-        );
-      });
-    },
-    edit: (msg, mid) => {
-      return new Promise((res, rej) => {
-        api.editMessage(msg, mid, (err) => {
-          if (err) rej(err);
-          else res(true);
-        });
-      });
-    },
-    fbPost: async ({ body, attachment }) => {
-      return new Promise((resolve, reject) => {
-        api.createPost(
-          { body: body || "", attachment: attachment || [] },
-          (error, data) => {
-            if (error) {
-              reject({
-                success: false,
-                message: "Failed to create post",
-                error,
-              });
-              return;
-            }
-
-            if (!data?.data || data.errors) {
-              reject({
-                success: false,
-                message: "API returned an error",
-                data,
-              });
-              return;
-            }
-
-            resolve({ success: true, data });
-          }
         );
       });
     },
@@ -185,6 +138,18 @@ module.exports = async function listener({ api, event }) {
   }
 
   const senderID = event.senderID;
+
+  function antiNSFW(name) {
+    const nsfwKeywords = ["18+", "nsfw", "porn", "hentai", "lewd"];
+    return nsfwKeywords.some((word) => name.includes(word));
+  }
+
+  if (antiNSFW(commandName)) {
+    await chat.reply(
+      fonts.sans("Warning: NSFW content is not allowed on Tokito.")
+    );
+    return;
+  }
 
   if (command) {
     const { config } = command.manifest;
