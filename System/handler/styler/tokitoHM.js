@@ -1,4 +1,4 @@
-class tokitoHM {
+class TokitoHM {
   constructor(commands, icon = "✦") {
     if (!Array.isArray(commands)) {
       throw new Error("Commands must be an array.");
