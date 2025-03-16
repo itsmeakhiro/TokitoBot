@@ -27,7 +27,7 @@ module.exports = {
     }
   },
   async deploy(ctx) {
-    const home = new ctx.tokitoHM(commands, "◆");
+    const home = new ctx.TokitoHM(commands, "◆");
     await home.runInContext(ctx);
   },
 };
