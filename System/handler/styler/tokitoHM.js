@@ -21,3 +21,5 @@ class TokitoHM {
     return this.commands.get(subcommand).deploy(ctx);
   }
 }
+
+module.exports = TokitoHM;
