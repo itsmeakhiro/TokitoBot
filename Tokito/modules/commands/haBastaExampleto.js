@@ -18,10 +18,10 @@ const commands = [
 module.exports = {
   manifest: {
     name: "example",
+    aliases: ["e"],
     description: "Example command using tokitoHM",
     usage: ["example info", "example help"],
     config: {
-    noPrefix: false,
     botAdmin: false,
     botModerator: false,
     }
