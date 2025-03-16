@@ -19,7 +19,7 @@ const RANKS = [
   { level: 85, rank: "Supreme Hashira" },
   { level: 90, rank: "Demon Slayer Master" },
   { level: 95, rank: "Ultimate Hashira" },
-  { level: 100, rank: "Infinity Hashira" }
+  { level: 100, rank: "Infinity Hashira" },
 ];
 
 class LevelSystem {
@@ -36,7 +36,7 @@ class LevelSystem {
   }
 
   setXP(xp) {
-    this.data.xp = Math.max(0, xp); 
+    this.data.xp = Math.max(0, xp);
   }
 
   getLevel() {
@@ -46,7 +46,7 @@ class LevelSystem {
   getRank() {
     let level = this.getLevel();
     let rank = RANKS.findLast((r) => level >= r.level);
-    return rank ? rank.rank : RANKS[RANKS.length - 1].rank;
+    return rank ? rank.rank : RANKS[RANKS.length - 1]?.rank;
   }
 
   setUsername(username) {
@@ -61,3 +61,5 @@ class LevelSystem {
     return JSON.parse(JSON.stringify(this.data));
   }
 }
+
+module.exports = LevelSystem;

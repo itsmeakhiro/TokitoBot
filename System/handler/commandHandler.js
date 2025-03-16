@@ -120,7 +120,9 @@ module.exports = async function commandHandler({
   } catch (error) {
     console.error(`Error executing command "${commandNameOrAlias}":`, error);
     await chat.send(
-      `An error occurred while executing the command: ${error.message}`
+      `An error occurred while executing the command: ${
+        error instanceof Error ? error.message : JSON.stringify(error)
+      }`
     );
   }
 };

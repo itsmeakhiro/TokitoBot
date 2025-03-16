@@ -3,7 +3,7 @@ module.exports = async function eventHandler({ ...entryObj }) {
 
   try {
     if (!event) {
-      log("ERROR", "No event data provided");
+      // log("ERROR", "No event data provided");
       return;
     }
 

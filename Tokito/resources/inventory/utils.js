@@ -1,31 +1,10 @@
-export class Inventory {
+class Inventory {
   constructor(inventory = [], limit = global.Cassidy.invLimit) {
     inventory ??= [];
 
     this.limit = limit;
-    /**
-     * @type {Array<import("cassidy-userData").InventoryItem>}
-     */
-    this.inv = this.sanitize(JSON.parse(JSON.stringify(inventory)));
 
-    // this.inv = new Proxy(this.inv, {
-    //   get(target, prop) {
-    //     return target[prop];
-    //   },
-    //   set(target, prop, value) {
-    //     if (target.length >= target.limit && !isNaN(parseInt(prop))) {
-    //       const err = new Error(
-    //         `Inventory is full (${target.length}/${target.limit})`
-    //       );
-    //       err.name = "InventoryFullError";
-    //       err.code = "ERR_INVENTORY_FULL";
-    //       throw err;
-    //     } else {
-    //       target[prop] = value;
-    //     }
-    //     return true;
-    //   },
-    // });
+    this.inv = this.sanitize(JSON.parse(JSON.stringify(inventory)));
   }
   sanitize(inv = this.inv) {
     if (!Array.isArray(inv)) {
@@ -199,7 +178,14 @@ export class Inventory {
   raw() {
     return Array.from(this.inv);
   }
+  export() {
+    return {
+      inventory: this.raw(),
+    };
+  }
   *keys() {
     yield* this.inv.map((item) => item.key);
   }
-  }
+}
+
+module.exports = Inventory;

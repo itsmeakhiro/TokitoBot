@@ -20,13 +20,14 @@ const WEALTH_RANKS = [
   { amount: 10_000_000_000_000, rank: "Global Economic Minister" },
   { amount: 50_000_000_000_000, rank: "Minister of Finance" },
   { amount: 100_000_000_000_000, rank: "High Council of Wealth" },
-  { amount: 1_000_000_000_000_000, rank: "Royal Minister of Treasury" }
+  { amount: 1_000_000_000_000_000, rank: "Royal Minister of Treasury" },
 ];
 
 class BalanceHandler {
   constructor(data) {
     this.data = data ?? {};
-    this.data.balance = typeof this.data.balance === "number" ? this.data.balance : 0;
+    this.data.balance =
+      typeof this.data.balance === "number" ? this.data.balance : 0;
   }
 
   getBalance() {
@@ -34,22 +35,30 @@ class BalanceHandler {
   }
 
   addBalance(amount) {
-    if (typeof amount !== "number" || amount <= 0) throw new Error("Invalid amount.");
+    if (typeof amount !== "number" || amount <= 0)
+      throw new Error("Invalid amount.");
     this.data.balance += amount;
   }
 
   deductBalance(amount) {
-    if (typeof amount !== "number" || amount <= 0) throw new Error("Invalid amount.");
+    if (typeof amount !== "number" || amount <= 0)
+      throw new Error("Invalid amount.");
     if (this.data.balance < amount) throw new Error("Insufficient balance.");
     this.data.balance -= amount;
   }
 
   getWealthRank() {
     let rank = WEALTH_RANKS.findLast((r) => this.data.balance >= r.amount);
-    return rank ? rank.rank : WEALTH_RANKS[0].rank;
+    return rank ? rank.rank : WEALTH_RANKS[0]?.rank;
   }
 
   export() {
     return { balance: this.data.balance };
   }
+
+  raw() {
+    return this.export().balance;
+  }
 }
+
+module.exports = BalanceHandler;

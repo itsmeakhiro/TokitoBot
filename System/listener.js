@@ -4,12 +4,14 @@
  * @typedef {Record<string, any> & { callback: Function }} RepliesArg
  */
 
+let isConnected = false;
+
 /**
  * @type {Map<string, RepliesArg>}
  */
 
-let isConnected = false;
 const replies = new Map();
+
 const fs = require("fs");
 const path = require("path");
 const log = require("./logger");
@@ -132,7 +134,10 @@ module.exports = async function listener({ api, event }) {
       try {
         await target.callback({ ...entryObj, ReplyData: { ...target } });
       } catch (error) {
-        log("ERROR", error.stack);
+        log(
+          "ERROR",
+          error instanceof Error ? error.stack : JSON.stringify(error)
+        );
       }
     }
   }
@@ -154,19 +159,24 @@ module.exports = async function listener({ api, event }) {
   if (command) {
     const { config } = command.manifest;
 
-    const requiresPrefix = config?.noPrefix === true || config?.noPrefix === undefined;
+    const requiresPrefix =
+      config?.noPrefix === true || config?.noPrefix === undefined;
     const disallowsPrefix = config?.noPrefix === false;
 
     if (requiresPrefix && !hasPrefix) {
       await chat.reply(
-        fonts.sans(`The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`)
+        fonts.sans(
+          `The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`
+        )
       );
       return;
     }
 
     if (disallowsPrefix && hasPrefix) {
       await chat.reply(
-        fonts.sans(`The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`)
+        fonts.sans(
+          `The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`
+        )
       );
       return;
     }
@@ -188,14 +198,18 @@ module.exports = async function listener({ api, event }) {
 
     if (config?.botAdmin && !isAdmin) {
       await chat.reply(
-        fonts.sans("Access denied, you don't have rights to use this admin-only command.")
+        fonts.sans(
+          "Access denied, you don't have rights to use this admin-only command."
+        )
       );
       return;
     }
 
     if (config?.botModerator && !isModerator && !isAdmin) {
       await chat.reply(
-        fonts.sans("Access denied, you don't have rights to use this moderator-only command.")
+        fonts.sans(
+          "Access denied, you don't have rights to use this moderator-only command."
+        )
       );
       return;
     }

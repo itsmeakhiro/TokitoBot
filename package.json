@@ -1,5 +1,5 @@
 {
-  "name": "nodejs",
+  "name": "tokito-vx",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,10 +8,9 @@
     "start": "node core"
   },
   "keywords": [],
-  "author": "",
+  "author": "Francis & Liane",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^18.0.6",
     "axios": "^1.7.9",
     "cassidy-styler": "^1.2.2",
     "chatbox-fca-remake": "^4.3.1",
@@ -22,5 +21,9 @@
     "path": "^0.12.7",
     "ws3-fca": "^1.0.47",
     "yt-search": "^2.12.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
   }
 }
