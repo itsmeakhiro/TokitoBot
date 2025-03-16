@@ -1,5 +1,5 @@
 class Inventory {
-  constructor(inventory = [], limit = global.Cassidy.invLimit) {
+  constructor(inventory = [], limit = Infinity) {
     inventory ??= [];
 
     this.limit = limit;

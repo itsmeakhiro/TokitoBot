@@ -26,6 +26,7 @@ class LevelSystem {
   static RANKS = RANKS;
   constructor(data) {
     this.data = data ?? {};
+    this.data.xp ??= 0;
   }
 
   getXP() {

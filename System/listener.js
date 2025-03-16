@@ -168,22 +168,22 @@ module.exports = async function listener({ api, event }) {
     const disallowsPrefix = config?.noPrefix === false;
 
     if (requiresPrefix && !hasPrefix) {
-      await chat.reply(
-        fonts.sans(
-          `The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`
-        )
-      );
+      // await chat.reply(
+      //   fonts.sans(
+      //     `The command "${commandName}" requires a prefix. Use "${usedPrefix}${commandName}" instead.`
+      //   )
+      // );
       return;
     }
 
-    if (disallowsPrefix && hasPrefix) {
-      await chat.reply(
-        fonts.sans(
-          `The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`
-        )
-      );
-      return;
-    }
+    // if (disallowsPrefix && hasPrefix) {
+    //   await chat.reply(
+    //     fonts.sans(
+    //       `The command "${commandName}" does not require a prefix. Just type "${commandName}" instead.`
+    //     )
+    //   );
+    //   return;
+    // }
 
     const admins = global.Tokito.config.admins || [];
     const moderators = global.Tokito.config.moderators || [];
@@ -222,9 +222,12 @@ module.exports = async function listener({ api, event }) {
       await command.deploy(entryObj);
     } catch (err) {
       console.error(`Error executing command "${commandName}":`, err);
+      err instanceof Error ? await chat.reply(err?.stack) : null;
     }
     return;
   }
+
+  if (!hasPrefix) return;
 
   await chat.reply(
     fonts.sans(
