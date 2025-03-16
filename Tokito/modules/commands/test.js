@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {TokitoLia.Command}
+ */
+const command = {
   manifest: {
     name: "hi",
     aliases: ["h"],
@@ -15,3 +18,4 @@ module.exports = {
     chat.send(fonts.sans("ha?"));
   },
 };
+module.exports = command;

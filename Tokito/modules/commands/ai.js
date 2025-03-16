@@ -11,7 +11,7 @@ const formatSearchResults = (results, fonts) => {
 };
 
 /**
- * @type {Tokito.Command}
+ * @type {TokitoLia.Command}
  */
 const command = {
   manifest: {

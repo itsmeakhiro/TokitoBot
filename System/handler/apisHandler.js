@@ -1,7 +1,7 @@
 const axios = require("axios").default;
 
 /**
- * @type {Tokito.Route}
+ * @type {TokitoLia.Route}
  */
 const routes = {
   async chatbotMarin(message) {
