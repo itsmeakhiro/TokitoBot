@@ -4,6 +4,10 @@ const log = require("./System/logger");
 const tokito = require("./tokito");
 const express = require("express");
 const app = express();
+const EventEmitter = require("events");
+
+const bot = new EventEmitter();
+global.bot = bot;
 
 process.on("unhandledRejection", (error) => log("ERROR", error.stack));
 process.on("uncaughtException", (error) => log("ERROR", error.stack));
